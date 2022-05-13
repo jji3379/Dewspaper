@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class IndexRestController {
+
     @GetMapping("/")
     public String main() throws Exception{
         return "test";
     }
+
 }
