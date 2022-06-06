@@ -1,4 +1,4 @@
-package backend.ssr.ddd.ssrblog.oauth;
+package backend.ssr.ddd.ssrblog.account.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Role {
 
-    GUEST("ROLE_GUEST","손님"),
-    USER("ROLE_USER","일반 사용자");
+    GUEST("GUEST","손님"),
+    USER("USER","일반 사용자");
 
-    private final String key;
+    private final String role;
     private final String title;
 }
