@@ -1,4 +1,4 @@
-package backend.ssr.ddd.ssrblog.config;
+package backend.ssr.ddd.ssrblog.config.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.context.annotation.Bean;
