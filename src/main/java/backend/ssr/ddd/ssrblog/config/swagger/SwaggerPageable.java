@@ -1,4 +1,4 @@
-package backend.ssr.ddd.ssrblog.config;
+package backend.ssr.ddd.ssrblog.config.swagger;
 
 import io.swagger.annotations.ApiParam;
 import lombok.Getter;
