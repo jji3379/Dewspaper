@@ -4,6 +4,7 @@ import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
 import backend.ssr.ddd.ssrblog.post.domain.repository.PostRepository;
 import backend.ssr.ddd.ssrblog.post.dto.PostRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,16 +18,23 @@ public class PostService {
 
     /**
      * 페이징 처리된 게시물 리스트 조회
+     * - 공개 설정 (privated = "N")
+     * - 삭제 여부 (deleted = "N")
      */
     @Transactional(readOnly = true)
-    public List<Post> getPostList() {
+    public List<Post> getPostList(Pageable pageable) {
 
-        return postRepository.findAll();
+        return postRepository.findAllByPrivatedAndDeleted(pageable, "N", "N");
     }
 
+    /**
+     * pk 가 postIdx 인 게시물 조회
+     * - 삭제 여부 (deleted = "N")
+     * - 조회시 조회수 증가
+     */
     @Transactional
     public Post getPost(Long postIdx) {
-        Post getPost = postRepository.findById(postIdx)
+        Post getPost = postRepository.findPostByPostIdxAndDeleted(postIdx,"N")
                 .orElseThrow(() -> new IllegalArgumentException("요청하신 게시물이 존재하지 않습니다."));
 
         getPost.updateBoardCount();
@@ -34,15 +42,23 @@ public class PostService {
         return postRepository.save(getPost);
     }
 
+    /**
+     * 게시물 등록
+     */
     @Transactional
     public Post savePost(PostRequest postRequest) {
 
         return postRepository.save(postRequest.toEntity());
     }
 
+    /**
+     * 게시물 수정
+     * pk 가 postIdx 인 게시물 수정
+     * - 삭제 여부 (deleted = "N")
+     */
     @Transactional
     public Post updatePost(Long postIdx, PostRequest postRequest) {
-        Post getPost = postRepository.findById(postIdx)
+        Post getPost = postRepository.findPostByPostIdxAndDeleted(postIdx, "N")
                 .orElseThrow(() -> new IllegalArgumentException("요청하신 게시물이 존재하지 않습니다.")
                 );
 
@@ -51,9 +67,15 @@ public class PostService {
         return postRepository.save(getPost);
     }
 
+    /**
+     * 게시물 삭제
+     * pk 가 postIdx 인 게시물 삭제
+     * - 삭제 여부 (deleted = "N")
+     * - 삭제시 deleted = "Y" 으로 update
+     */
     @Transactional
     public void deletePost(Long postIdx) {
-        Post getPost = postRepository.findById(postIdx)
+        Post getPost = postRepository.findPostByPostIdxAndDeleted(postIdx, "N")
                 .orElseThrow(() -> new IllegalArgumentException("요청하신 게시물이 존재하지 않습니다."));
 
         getPost.delete();

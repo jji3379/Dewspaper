@@ -21,9 +21,9 @@ public class Post extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postIdx;
 
-    private String thumnail_img;
+    private String thumnailImg;
 
-    private String thumnail_contents;
+    private String thumnailContents;
 
     private String title;
 
@@ -36,8 +36,8 @@ public class Post extends BaseTimeEntity {
     private String deleted;
 
     public void update(PostRequest postRequest) {
-        this.thumnail_img = postRequest.getThumnail_img();
-        this.thumnail_contents = postRequest.getThumnail_contents();
+        this.thumnailImg = postRequest.getThumnailImg();
+        this.thumnailContents = postRequest.getThumnailContents();
         this.title = postRequest.getTitle();
         this.contents = postRequest.getContents();
     }
@@ -51,10 +51,10 @@ public class Post extends BaseTimeEntity {
     }
 
     @Builder
-    public Post(Long postIdx, String thumnail_img, String thumnail_contents, String title, String contents, int board_count, String privated, String deleted) {
+    public Post(Long postIdx, String thumnailImg, String thumnailContents, String title, String contents, int board_count, String privated, String deleted) {
         this.postIdx = postIdx;
-        this.thumnail_img = thumnail_img;
-        this.thumnail_contents = thumnail_contents;
+        this.thumnailImg = thumnailImg;
+        this.thumnailContents = thumnailContents;
         this.title = title;
         this.contents = contents;
         this.board_count = board_count;
@@ -65,8 +65,8 @@ public class Post extends BaseTimeEntity {
     public PostResponse toResponse() {
         PostResponse build = PostResponse.builder()
                 .postIdx(postIdx)
-                .thumnail_img(thumnail_img)
-                .thumnail_contents(thumnail_contents)
+                .thumnailImg(thumnailImg)
+                .thumnailContents(thumnailContents)
                 .title(title)
                 .contents(contents)
                 .board_count(board_count)
