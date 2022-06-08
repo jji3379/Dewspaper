@@ -1,11 +1,13 @@
 package backend.ssr.ddd.ssrblog.index;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class IndexController {
 
-    public String index() {
-        return "index";
+    @GetMapping("/")
+    public String main() throws Exception{
+        return "hello world!";
     }
 }
