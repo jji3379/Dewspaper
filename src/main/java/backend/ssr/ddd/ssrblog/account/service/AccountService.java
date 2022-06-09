@@ -1,7 +1,7 @@
-package backend.ssr.ddd.ssrblog.service;
+package backend.ssr.ddd.ssrblog.account.service;
 
-import backend.ssr.ddd.ssrblog.domain.entity.Account;
-import backend.ssr.ddd.ssrblog.domain.repository.AccountRepository;
+import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
+import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

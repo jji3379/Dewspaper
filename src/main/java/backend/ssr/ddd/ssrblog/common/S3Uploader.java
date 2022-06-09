@@ -1,4 +1,4 @@
-package backend.ssr.ddd.ssrblog.service;
+package backend.ssr.ddd.ssrblog.common;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -17,7 +17,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 public class S3Uploader {
-
 
     private final AmazonS3Client amazonS3Client;
 
