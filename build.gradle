@@ -4,7 +4,7 @@ plugins {
     id 'eclipse'
     id 'java'
 }
-ㅈㄷㄹㅈㄷㄹㅁㅁㅁㅁㅁㅁㅁㅁㅁㄴ나는야ㄴㄴㄴ
+
 group = 'backend.ssr.ddd'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -29,4 +29,6 @@ dependencies {
     // Querydsl 추가 시작
     implementation 'com.querydsl:querydsl-jpa'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // s3 설정
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.1.0.RELEASE'
 }
