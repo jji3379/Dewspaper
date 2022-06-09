@@ -38,6 +38,4 @@ dependencies {
     // jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    // s3 설정
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.1.0.RELEASE'
 }
