@@ -42,9 +42,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             return;
         }
 
-        response.setHeader("Authorization", jwt);
+        //response.setHeader("Authorization", jwt);
 
-        //getRedirectStrategy().sendRedirect(request, response, url);
+        getRedirectStrategy().sendRedirect(request, response, url);
     }
 
     private String makeRedirectUrl(String token) {
