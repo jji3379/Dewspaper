@@ -41,7 +41,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             logger.debug("응답이 이미 커밋된 상태입니다. " + url + "로 리다이렉트하도록 바꿀 수 없습니다.");
             return;
         }
-        getRedirectStrategy().sendRedirect(request, response, url);
+
+        response.setHeader("Authorization", jwt);
+
+        //getRedirectStrategy().sendRedirect(request, response, url);
     }
 
     private String makeRedirectUrl(String token) {
