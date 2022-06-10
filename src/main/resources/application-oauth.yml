@@ -39,3 +39,4 @@ spring:
     secret: dewspaperServer
 
 scope: profile,email
+
