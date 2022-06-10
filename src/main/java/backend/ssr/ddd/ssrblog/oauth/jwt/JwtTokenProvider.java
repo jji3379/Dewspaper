@@ -26,7 +26,8 @@ public class JwtTokenProvider {
 
     private final CustomUserDetailService customUserDetailService;
 
-    private long tokenValidMilisecond = 1000L * 60 * 60; // 1시간만 토큰 유효
+    private Long tokenValidMilisecond = 1000L * 60 * 60; // 1시간만 토큰 유효
+    private Long refreshValidMilisecond = 1000L * 60 * 60 * 24 * 7; // 7일 토큰 유효
 
     @PostConstruct
     protected void init() {
@@ -34,17 +35,32 @@ public class JwtTokenProvider {
     }
 
     // Jwt 토큰 생성
-    public String createToken(String email, String roles, String platform) {
+    public JwtResponse createToken(String email, String roles, String platform) {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("roles", roles);
         Date now = new Date();
-        return Jwts.builder()
+        String accessToken = Jwts.builder()
                 .setClaims(claims) // 데이터
                 .setIssuer(platform) // 발급한 플랫폼
                 .setIssuedAt(now) // 토큰 발행일자
                 .setExpiration(new Date(now.getTime() + tokenValidMilisecond)) // set Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey ) // 암호화 알고리즘, secret값 세팅
                 .compact();
+
+        String refreshToken = Jwts.builder()
+                .setClaims(claims) // 데이터
+                .setIssuer(platform) // 발급한 플랫폼
+                .setIssuedAt(now) // 토큰 발행일자
+                .setExpiration(new Date(now.getTime() + refreshValidMilisecond)) // set Expire Time
+                .signWith(SignatureAlgorithm.HS256, secretKey ) // 암호화 알고리즘, secret값 세팅
+                .compact();
+
+        return JwtResponse.builder()
+                .grantType("Bearer")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpireDate(tokenValidMilisecond)
+                .build();
     }
 
     // JWT 토큰에서 인증 정보 조회

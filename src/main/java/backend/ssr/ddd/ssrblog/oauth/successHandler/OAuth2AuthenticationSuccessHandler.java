@@ -1,19 +1,24 @@
 package backend.ssr.ddd.ssrblog.oauth.successHandler;
 
 import backend.ssr.ddd.ssrblog.account.dto.AccountRequest;
+import backend.ssr.ddd.ssrblog.oauth.jwt.JwtResponse;
 import backend.ssr.ddd.ssrblog.oauth.mapper.AccountRequestMapper;
 import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -31,24 +36,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         AccountRequest accountRequest = accountRequestMapper.toDto(oAuth2User);
 
-        String jwt = jwtTokenProvider.createToken(accountRequest.getEmail(), accountRequest.getRole(), accountRequest.getPlatform());
+        JwtResponse jwt = jwtTokenProvider.createToken(accountRequest.getEmail(), accountRequest.getRole(), accountRequest.getPlatform());
 
-        log.info("jwt : {}", jwt);
+        log.info("jwt : {}", jwt.getAccessToken());
 
-        String url = makeRedirectUrl(jwt);
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("Token", jwt.getAccessToken());
+        body.put("refreshToken", jwt.getRefreshToken());
 
-        if (response.isCommitted()) {
-            logger.debug("응답이 이미 커밋된 상태입니다. " + url + "로 리다이렉트하도록 바꿀 수 없습니다.");
-            return;
-        }
+        response.setStatus(HttpStatus.OK.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        //response.setHeader("Authorization", jwt);
-
-        getRedirectStrategy().sendRedirect(request, response, url);
-    }
-
-    private String makeRedirectUrl(String token) {
-        return UriComponentsBuilder.fromUriString("https://jbs7uh.csb.app/oauth2/redirect/"+token)
-                .build().toUriString();
+        new ObjectMapper().writeValue(response.getOutputStream(), body);
     }
 }

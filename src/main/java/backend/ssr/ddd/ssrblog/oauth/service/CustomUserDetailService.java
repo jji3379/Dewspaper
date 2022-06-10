@@ -3,7 +3,6 @@ package backend.ssr.ddd.ssrblog.oauth.service;
 import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
