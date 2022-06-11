@@ -23,13 +23,13 @@ public class PostResponse {
     private String contents;
 
     @ApiModelProperty(value = "썸네일 이미지", example = "http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg", position = 4)
-    private String thumnailImg;
+    private String thumbnailImg;
 
     @ApiModelProperty(value = "썸네일 내용", example = "server-side rendering 은", position = 5)
-    private String thumnailContents;
+    private String thumbnailContents;
 
     @ApiModelProperty(value = "조회수", example = "15", position = 6)
-    private int board_count;
+    private int boardCount;
 
     @ApiModelProperty(value = "비공개 여부", example = "N", position = 7)
     private String privated;
@@ -41,13 +41,13 @@ public class PostResponse {
 
 
     @Builder
-    public PostResponse(Long postIdx, String title, String contents, String thumnailImg, String thumnailContents, int board_count, String privated, String deleted, LocalDateTime dateTime) {
+    public PostResponse(Long postIdx, String title, String contents, String thumbnailImg, String thumbnailContents, int boardCount, String privated, String deleted, LocalDateTime dateTime) {
         this.postIdx = postIdx;
         this.title = title;
         this.contents = contents;
-        this.thumnailImg = thumnailImg;
-        this.thumnailContents = thumnailContents;
-        this.board_count = board_count;
+        this.thumbnailImg = thumbnailImg;
+        this.thumbnailContents = thumbnailContents;
+        this.boardCount = boardCount;
         this.privated = privated;
         this.deleted = deleted;
         this.dateTime = dateTime;

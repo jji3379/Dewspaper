@@ -21,29 +21,29 @@ public class Post extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postIdx;
 
-    private String thumnailImg;
+    private String thumbnailImg;
 
-    private String thumnailContents;
+    private String thumbnailContents;
 
     private String title;
 
     private String contents;
 
-    private int board_count;
+    private int boardCount;
 
     private String privated;
 
     private String deleted;
 
     public void update(PostRequest postRequest) {
-        this.thumnailImg = postRequest.getThumnailImg();
-        this.thumnailContents = postRequest.getThumnailContents();
+        this.thumbnailImg = postRequest.getThumbnailImg();
+        this.thumbnailContents = postRequest.getThumbnailContents();
         this.title = postRequest.getTitle();
         this.contents = postRequest.getContents();
     }
 
     public void updateBoardCount() {
-        this.board_count++;
+        this.boardCount++;
     }
 
     public void delete() {
@@ -51,13 +51,13 @@ public class Post extends BaseTimeEntity {
     }
 
     @Builder
-    public Post(Long postIdx, String thumnailImg, String thumnailContents, String title, String contents, int board_count, String privated, String deleted) {
+    public Post(Long postIdx, String thumbnailImg, String thumbnailContents, String title, String contents, int boardCount, String privated, String deleted) {
         this.postIdx = postIdx;
-        this.thumnailImg = thumnailImg;
-        this.thumnailContents = thumnailContents;
+        this.thumbnailImg = thumbnailImg;
+        this.thumbnailContents = thumbnailContents;
         this.title = title;
         this.contents = contents;
-        this.board_count = board_count;
+        this.boardCount = boardCount;
         this.privated = privated;
         this.deleted = deleted;
     }
@@ -65,11 +65,11 @@ public class Post extends BaseTimeEntity {
     public PostResponse toResponse() {
         PostResponse build = PostResponse.builder()
                 .postIdx(postIdx)
-                .thumnailImg(thumnailImg)
-                .thumnailContents(thumnailContents)
+                .thumbnailImg(thumbnailImg)
+                .thumbnailContents(thumbnailContents)
                 .title(title)
                 .contents(contents)
-                .board_count(board_count)
+                .boardCount(boardCount)
                 .privated(privated)
                 .deleted(deleted)
                 .dateTime(getDateTime())

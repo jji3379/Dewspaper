@@ -25,19 +25,19 @@ public class PostRequest {
     private String contents;
 
     @ApiModelProperty(value = "썸네일 이미지", example = "http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg", position = 3)
-    private String thumnailImg;
+    private String thumbnailImg;
 
     @ApiModelProperty(value = "썸네일 내용", example = "SSR은 서버에서 ~~~", position = 4)
-    private String thumnailContents;
+    private String thumbnailContents;
 
 
     public Post toEntity() {
         Post build = Post.builder()
                 .title(title)
                 .contents(contents)
-                .thumnailImg(thumnailImg)
-                .thumnailContents(thumnailContents)
-                .board_count(0)
+                .thumbnailImg(thumbnailImg)
+                .thumbnailContents(thumbnailContents)
+                .boardCount(0)
                 .privated("N")
                 .deleted("N")
                 .build();
