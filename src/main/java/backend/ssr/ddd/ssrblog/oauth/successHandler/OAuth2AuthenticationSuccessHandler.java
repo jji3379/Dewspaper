@@ -56,7 +56,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 //
 //        new ObjectMapper().writeValue(response.getOutputStream(), body);
 
-        return UriComponentsBuilder.fromUriString("http://localhost:3000/callback/login/"+ jwt.getAccessToken())
+        return UriComponentsBuilder.fromUriString("http://localhost:3000/callback/login?token=" + jwt.getAccessToken() + "&refreshtoken=" + jwt.getRefreshToken())
                 .build().toUriString();
     }
 }
