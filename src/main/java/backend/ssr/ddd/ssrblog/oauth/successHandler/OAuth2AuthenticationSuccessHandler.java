@@ -47,16 +47,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private String makeRedirectUrl(JwtResponse jwt, HttpServletResponse response) throws IOException {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("Token", jwt.getAccessToken());
-        body.put("refreshToken", jwt.getRefreshToken());
+//        Map<String, Object> body = new LinkedHashMap<>();
+//        body.put("Token", jwt.getAccessToken());
+//        body.put("refreshToken", jwt.getRefreshToken());
+//
+//        response.setStatus(HttpStatus.OK.value());
+//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+//
+//        new ObjectMapper().writeValue(response.getOutputStream(), body);
 
-        response.setStatus(HttpStatus.OK.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-
-        new ObjectMapper().writeValue(response.getOutputStream(), body);
-
-        return UriComponentsBuilder.fromUriString("http://localhost:3000/callback/login/")
+        return UriComponentsBuilder.fromUriString("http://localhost:3000/callback/login/"+ jwt.getAccessToken())
                 .build().toUriString();
     }
 }
