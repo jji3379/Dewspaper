@@ -32,14 +32,17 @@ public class Account implements UserDetails {
 
     private String withdrawal = "N";
 
+    private String refreshToken;
+
     @Builder
-    public Account(Long accountIdx, String profileImg, String platform, String email, String name, Role role) {
+    public Account(Long accountIdx, String profileImg, String platform, String email, String name, Role role, String refreshToken) {
         this.accountIdx = accountIdx;
         this.profileImg = profileImg;
         this.platform = platform;
         this.email = email;
         this.name = name;
         this.role = role;
+        this.refreshToken = refreshToken;
     }
 
     public AccountResponse toResponse() {

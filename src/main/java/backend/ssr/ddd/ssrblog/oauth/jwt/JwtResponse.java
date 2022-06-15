@@ -6,16 +6,13 @@ import lombok.Getter;
 
 @Getter
 public class JwtResponse {
-    private String grantType; // bearer
     private String accessToken;
     private String refreshToken;
-    private Long accessTokenExpireDate;
 
-    @Builder
-    public JwtResponse(String grantType, String accessToken, String refreshToken, Long accessTokenExpireDate) {
-        this.grantType = grantType;
+    public JwtResponse createJwt(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.accessTokenExpireDate = accessTokenExpireDate;
+
+        return this;
     }
 }

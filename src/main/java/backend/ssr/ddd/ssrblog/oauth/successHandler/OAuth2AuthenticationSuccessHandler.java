@@ -33,7 +33,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         AccountRequest accountRequest = accountRequestMapper.toDto(oAuth2User);
 
-        JwtResponse jwt = jwtTokenProvider.createToken(accountRequest.getEmail(), accountRequest.getRole(), accountRequest.getPlatform());
+        String accessToken = jwtTokenProvider.createToken(accountRequest.getEmail(), accountRequest.getRole(), accountRequest.getPlatform());
+        String refreshToken = jwtTokenProvider.createRefreshToken();
+
+        JwtResponse jwt = new JwtResponse();
+        jwt.createJwt(accessToken, refreshToken);
 
         log.info("jwt : {}", jwt.getAccessToken());
 
