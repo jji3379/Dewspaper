@@ -4,12 +4,9 @@ import backend.ssr.ddd.ssrblog.account.dto.AccountRequest;
 import backend.ssr.ddd.ssrblog.oauth.jwt.JwtResponse;
 import backend.ssr.ddd.ssrblog.oauth.mapper.AccountRequestMapper;
 import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -19,8 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Slf4j
 @Component
@@ -42,19 +37,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         log.info("jwt : {}", jwt.getAccessToken());
 
-        String url = makeRedirectUrl(jwt, response);
+        String url = makeRedirectUrl(jwt);
+
+        log.info("Oauth Url : " + url);
+
         getRedirectStrategy().sendRedirect(request, response, url);
     }
 
-    private String makeRedirectUrl(JwtResponse jwt, HttpServletResponse response) throws IOException {
-//        Map<String, Object> body = new LinkedHashMap<>();
-//        body.put("Token", jwt.getAccessToken());
-//        body.put("refreshToken", jwt.getRefreshToken());
-//
-//        response.setStatus(HttpStatus.OK.value());
-//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//
-//        new ObjectMapper().writeValue(response.getOutputStream(), body);
+    private String makeRedirectUrl(JwtResponse jwt) {
 
         return UriComponentsBuilder.fromUriString("http://localhost:3000/callback/login?token=" + jwt.getAccessToken() + "&refreshtoken=" + jwt.getRefreshToken())
                 .build().toUriString();

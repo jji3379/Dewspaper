@@ -65,7 +65,10 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = customUserDetailService.loadUserByUsername(this.getUserEmail(token), this.getUserPlatform(token));
+        // CustomUserDetailsService 가 UserDetailsService 를 상속받고 있고 security auth config 에서 사용되기에 username 안에 email 과 platfrom 정보를 담는다.
+        String username = this.getUserEmail(token) + "," + this.getUserPlatform(token);
+
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(username);
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
