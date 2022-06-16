@@ -2,14 +2,10 @@ package backend.ssr.ddd.ssrblog.account.controller;
 
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import backend.ssr.ddd.ssrblog.account.service.AccountService;
-import backend.ssr.ddd.ssrblog.oauth.jwt.JwtResponse;
-import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -20,10 +16,11 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    @GetMapping("/api/{idx}")
-    public AccountResponse getAccount(@PathVariable Long idx) {
+    @GetMapping("/api/{accountIdx}") @ApiOperation(value = "회원 정보 조회", notes = "회원의 상세 정보를 조회 한다.")
+    @ApiImplicitParam(name = "accountIdx", required = true, value = "예 : 1")
+    public AccountResponse getAccount(@PathVariable Long accountIdx) {
 
-        return accountService.getAccountOne(idx).toResponse();
+        return accountService.getAccountOne(accountIdx).toResponse();
     }
 
     @PostMapping("/api/refresh-token") @ApiOperation(value = "토큰 재발급", notes = "refresh-token 을 header 에 입력하여 새로운 토큰을 발급 받는다.")
