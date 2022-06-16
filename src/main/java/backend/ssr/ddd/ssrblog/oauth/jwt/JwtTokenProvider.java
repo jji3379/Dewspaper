@@ -1,7 +1,5 @@
 package backend.ssr.ddd.ssrblog.oauth.jwt;
 
-import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
-import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
 import backend.ssr.ddd.ssrblog.oauth.service.CustomUserDetailService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +14,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
@@ -27,8 +23,6 @@ public class JwtTokenProvider {
     private String secretKey ;
 
     private final CustomUserDetailService customUserDetailService;
-
-    private final AccountRepository accountRepository;
 
     private Long tokenValidMilisecond = 1000L * 60 * 60; // 1시간만 토큰 유효
     private Long refreshValidMilisecond = 1000L * 60 * 60 * 24 * 7; // 7일 토큰 유효
@@ -86,7 +80,7 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getIssuer();
     }
 
-    // Request의 Header에서 token 값을 가져옵니다. "authorization" : "token'
+    // Request의 Header에서 token 값을 가져옵니다. "authorization" : "token"
     public String resolveToken(HttpServletRequest request) {
         if(request.getHeader("authorization") != null )
             return request.getHeader("authorization").substring(7);

@@ -1,5 +1,7 @@
 package backend.ssr.ddd.ssrblog.post.service;
 
+import backend.ssr.ddd.ssrblog.common.Exception.CustomException;
+import backend.ssr.ddd.ssrblog.common.Exception.ErrorCode;
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
 import backend.ssr.ddd.ssrblog.post.domain.repository.PostRepository;
 import backend.ssr.ddd.ssrblog.post.dto.PostRequest;
@@ -35,7 +37,7 @@ public class PostService {
     @Transactional
     public Post getPost(Long postIdx) {
         Post getPost = postRepository.findPostByPostIdxAndDeleted(postIdx,"N")
-                .orElseThrow(() -> new IllegalArgumentException("요청하신 게시물이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         getPost.updateBoardCount();
 
@@ -59,8 +61,7 @@ public class PostService {
     @Transactional
     public Post updatePost(Long postIdx, PostRequest postRequest) {
         Post getPost = postRepository.findPostByPostIdxAndDeleted(postIdx, "N")
-                .orElseThrow(() -> new IllegalArgumentException("요청하신 게시물이 존재하지 않습니다.")
-                );
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         getPost.update(postRequest);
 
@@ -76,7 +77,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long postIdx) {
         Post getPost = postRepository.findPostByPostIdxAndDeleted(postIdx, "N")
-                .orElseThrow(() -> new IllegalArgumentException("요청하신 게시물이 존재하지 않습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         getPost.delete();
     }
