@@ -4,6 +4,7 @@ import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,14 @@ public class JwtAuthenticationFilter extends GenericFilter {
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
             // SecurityContext 에 Authentication 객체를 저장합니다.
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else {
+            if (StringUtils.isEmpty(token)) {
+                request.setAttribute("unauthorization", "401 인증키 없음.");
+            }
+
+            if (jwtTokenProvider.validateToken(token)) {
+                request.setAttribute("unauthorization", "401 인증키 만료.");
+            }
         }
         chain.doFilter(request, response);
     }

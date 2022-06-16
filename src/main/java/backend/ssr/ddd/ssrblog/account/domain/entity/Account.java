@@ -45,6 +45,10 @@ public class Account implements UserDetails {
         this.refreshToken = refreshToken;
     }
 
+    public void issueRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     public AccountResponse toResponse() {
         AccountResponse build = AccountResponse.builder()
                 .accountIdx(accountIdx)

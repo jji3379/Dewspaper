@@ -2,6 +2,7 @@ package backend.ssr.ddd.ssrblog.oauth.service;
 
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
+import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,6 +37,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
      * 하지만 JWT 방식에서는 저장하지 않는다. (JWT 방식에서는 인증&인가 수행시 HttpSession을 사용하지 않을 것이다.)
      */
     private final AccountRepository accountRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 구글로 부터 받은 userRequest 데이터에 대한 후처리되는 함수
     // loadUser(OAuth2UserRequest oAuth2UserRequest) 메서드는 사용자 정보를 요청할 수 있는 access token 을 얻고나서 실행된다.
@@ -65,6 +67,12 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         Account account = accountRepository.findByEmailAndPlatform(attributes.getEmail(), attributes.getPlatform())
                 .map(entity -> entity.update(attributes.getPlatform(), attributes.getName(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
+
+        boolean isValid = jwtTokenProvider.validateToken(account.getRefreshToken());
+
+        if (!isValid || account.getRefreshToken().isEmpty()) {
+            account.issueRefreshToken(jwtTokenProvider.createRefreshToken(attributes.getEmail(), attributes.getPlatform()));
+        }
 
         return accountRepository.save(account);
     }
