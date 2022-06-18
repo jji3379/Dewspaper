@@ -17,3 +17,15 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+cloud:
+  aws:
+    s3:
+      bucket: ddd-project
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: AKIA2O4HZN3WXBA5JSHT
+      secret-key: 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
+    stack:
+      auto: false
