@@ -35,6 +35,8 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     // 로그인 확인용 머스테치
     implementation 'org.springframework.boot:spring-boot-starter-mustache'
+    //s3
+    implementation'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     // jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
