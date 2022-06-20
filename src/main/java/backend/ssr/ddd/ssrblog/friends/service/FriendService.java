@@ -1,5 +1,6 @@
 package backend.ssr.ddd.ssrblog.friends.service;
 
+import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
 import backend.ssr.ddd.ssrblog.common.Exception.CustomException;
 import backend.ssr.ddd.ssrblog.common.Exception.ErrorCode;
 import backend.ssr.ddd.ssrblog.friends.domain.entity.Friends;
@@ -15,6 +16,8 @@ import java.util.List;
 public class FriendService {
 
     private final FriendsRepository friendsRepository;
+
+    private final AccountRepository accountRepository;
 
     // 요청 받은 사람의 입장이기 때문에 accepterIdx 를 파라미터로 받는다.
 
@@ -37,7 +40,12 @@ public class FriendService {
     /**
      * 친구 요청
      */
-    public Friends saveFriends(FriendsRequest friendsRequest) {
+    public Friends newFriendRequest(FriendsRequest friendsRequest) {
+        accountRepository.findById(friendsRequest.getRequesterIdx())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REQUESTER));
+
+        accountRepository.findById(friendsRequest.getAccepterIdx())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCEPTER));
 
         return friendsRepository.save(friendsRequest.toEntity());
     }
@@ -45,20 +53,22 @@ public class FriendService {
     /**
      * 친구 수락
      */
-    public void acceptFriend(Long friendsIdx) {
-        Friends friends = friendsRepository.findById(friendsIdx)
+    public Friends acceptFriend(FriendsRequest friendsRequest) {
+        Friends friends = friendsRepository.findByRequesterIdxAndAccepterIdx(friendsRequest.getRequesterIdx(), friendsRequest.getAccepterIdx())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIENDS));
 
         friends.acceptFriend();
+
+        return friendsRepository.save(friends);
     }
 
     /**
-     * 친구 삭제 - 차단
+     * 친구 삭제
      */
-    public void deleteFriend(Long friendsIdx) {
-        Friends friends = friendsRepository.findById(friendsIdx)
+    public void deleteFriend(FriendsRequest friendsRequest) {
+        Friends friends = friendsRepository.findByRequesterIdxAndAccepterIdx(friendsRequest.getRequesterIdx(), friendsRequest.getAccepterIdx())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIENDS));
 
-        friends.acceptFriend();
+        friendsRepository.delete(friends);
     }
 }
