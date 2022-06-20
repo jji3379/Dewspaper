@@ -19,6 +19,8 @@ public enum ErrorCode {
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     NOT_FOUND_ACCOUNT(NOT_FOUND, "요청하신 회원의 정보가 존재하지 않습니다"),
+    NOT_FOUND_REQUESTER(NOT_FOUND, "친구 신청 회원의 정보가 존재하지 않습니다"),
+    NOT_FOUND_ACCEPTER(NOT_FOUND, "친구 수락 회원의 정보가 존재하지 않습니다"),
     NOT_FOUND_POST(NOT_FOUND, "요청하신 게시물이 존재하지 않습니다"),
     NOT_FOUND_FRIENDS(NOT_FOUND, "요청하신 친구요청이 존재하지 않습니다"),
 
