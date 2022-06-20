@@ -1,6 +1,6 @@
 package backend.ssr.ddd.ssrblog.post.domain.entity;
 
-import backend.ssr.ddd.ssrblog.common.BaseTimeEntity;
+import backend.ssr.ddd.ssrblog.common.TimeEntity.BaseTimeEntity;
 import backend.ssr.ddd.ssrblog.post.dto.PostRequest;
 import backend.ssr.ddd.ssrblog.post.dto.PostResponse;
 import lombok.Builder;

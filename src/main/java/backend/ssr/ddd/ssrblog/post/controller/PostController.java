@@ -31,13 +31,13 @@ public class PostController {
     @GetMapping("/posts") @ApiOperation(value = "게시물 전체 정보 조회", notes = "게시물 전체를 페이징 처리하여 조회한다. (공개 되어있으면서 (privated = N), 삭제 되지 않은 게시물들만 조회 (deleted = N))")
     public ResponseEntity<Page<PostResponse>> getPostPagingList(Pageable pageable) {
         List<Post> postList = postService.getPostList(pageable);
-        List<PostResponse> list = new ArrayList();
+        List<PostResponse> responseList = new ArrayList();
 
         for (Post post : postList) {
-            list.add(post.toResponse());
+            responseList.add(post.toResponse());
         }
 
-        return new ResponseEntity(new PageImpl<>(list, pageable, list.size()), HttpStatus.OK);
+        return new ResponseEntity(new PageImpl<>(responseList, pageable, responseList.size()), HttpStatus.OK);
     }
 
     @GetMapping("/post/{postIdx}") @ApiOperation(value = "게시물 조회", notes = "게시물 번호가 postIdx 인 게시물의 정보를 조회한다.")

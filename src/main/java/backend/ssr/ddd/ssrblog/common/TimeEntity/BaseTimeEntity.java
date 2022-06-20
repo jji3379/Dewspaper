@@ -1,4 +1,4 @@
-package backend.ssr.ddd.ssrblog.common;
+package backend.ssr.ddd.ssrblog.common.TimeEntity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
