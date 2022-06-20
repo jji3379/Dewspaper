@@ -43,8 +43,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String url = makeRedirectUrl(jwt);
 
-        log.info("Oauth Url : " + url);
-
         getRedirectStrategy().sendRedirect(request, response, url);
     }
 

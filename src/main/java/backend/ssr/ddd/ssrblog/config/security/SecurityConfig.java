@@ -42,12 +42,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 X
-                //.and()
-                //    .exceptionHandling()
-                //        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                //        .accessDeniedHandler(jwtAccessDeniedHandler)
-//                .and()
-//                    .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
+                .and()
+                    .exceptionHandling()
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                        .accessDeniedHandler(jwtAccessDeniedHandler)
+                .and()
+                    .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
+                        .antMatchers("/test").authenticated()
 //                        .antMatchers("/api/**").authenticated()
 //                        .antMatchers(HttpMethod.POST).authenticated() // 등록에 대한 Method 에 접근시 인증된 사용자만 접근 가능
 //                        .antMatchers(HttpMethod.PUT).authenticated() // 수정에 대한 Method 에 접근시 인증된 사용자만 접근 가능

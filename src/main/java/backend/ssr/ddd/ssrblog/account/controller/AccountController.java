@@ -32,4 +32,10 @@ public class AccountController {
         return reissueToken;
     }
 
+    @GetMapping("/test")
+    public String tokenTest() {
+
+        return "토큰토큰";
+    }
+
 }
