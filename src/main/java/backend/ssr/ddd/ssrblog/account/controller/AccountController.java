@@ -17,7 +17,7 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    @GetMapping("/{accountIdx}") @ApiOperation(value = "회원 정보 조회", notes = "회원의 상세 정보를 조회 한다.")
+    @GetMapping("/account/{accountIdx}") @ApiOperation(value = "회원 정보 조회", notes = "회원의 상세 정보를 조회 한다.")
     @ApiImplicitParam(name = "accountIdx", required = true, value = "예 : 1")
     public AccountResponse getAccount(@PathVariable Long accountIdx) {
 
