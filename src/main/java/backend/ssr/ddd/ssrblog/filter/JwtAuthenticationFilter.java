@@ -1,20 +1,17 @@
 package backend.ssr.ddd.ssrblog.filter;
 
-import backend.ssr.ddd.ssrblog.common.Exception.CustomException;
-import backend.ssr.ddd.ssrblog.common.Exception.ErrorCode;
 import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RequiredArgsConstructor
-@Slf4j
 public class JwtAuthenticationFilter extends GenericFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -32,15 +29,14 @@ public class JwtAuthenticationFilter extends GenericFilter {
         } else {
             if (StringUtils.isEmpty(token) || token == null) {
                 request.setAttribute("unauthorization", "401 인증키 없음.");
-                log.debug("인증키 없음");
 
-                throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰이 존재하지 않습니다.");
             }
 
             if (jwtTokenProvider.validateToken(token)) {
                 request.setAttribute("unauthorization", "401 인증키 만료.");
-                log.debug("인증키 만료");
-                throw new CustomException(ErrorCode.EXPIRE_TOKEN);
+
+                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰이 만료 되었습니다.");
             }
         }
         chain.doFilter(request, response);
