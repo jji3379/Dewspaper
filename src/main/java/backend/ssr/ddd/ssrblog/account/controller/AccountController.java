@@ -36,9 +36,9 @@ public class AccountController {
     }
 
     @GetMapping("/test")
-    public ResponseEntity<String> tokenTest() {
+    public String tokenTest() {
 
-        return new ResponseEntity<>("토큰토큰", HttpStatus.OK);
+        return "토큰토큰";
     }
 
 }

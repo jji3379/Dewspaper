@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends GenericFilter {
                 ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰이 존재하지 않습니다.");
             }
 
-            if (jwtTokenProvider.validateToken(token)) {
+            if (!jwtTokenProvider.validateToken(token)) {
                 request.setAttribute("unauthorization", "401 인증키 만료.");
 
                 ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰이 만료 되었습니다.");

@@ -48,13 +48,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .accessDeniedHandler(jwtAccessDeniedHandler)
 //                .and()
 //                    .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
-//                        .antMatchers("/api/test").authenticated()
-//                        .antMatchers("/api/**").authenticated()
 //                        .antMatchers(HttpMethod.POST).authenticated() // 등록에 대한 Method 에 접근시 인증된 사용자만 접근 가능
 //                        .antMatchers(HttpMethod.PUT).authenticated() // 수정에 대한 Method 에 접근시 인증된 사용자만 접근 가능
 //                        .antMatchers(HttpMethod.DELETE).authenticated() // 삭제에 대한 Method 에 접근시 인증된 사용자만 접근 가능
                 .and()
                     .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+                        .antMatcher("/api/test")
                         .oauth2Login() // OAuth2 로그인 기능에 대한 여러 설정의 진입점
                 .defaultSuccessUrl("/login-success") // oauth2 인증이 성공했을 때, 이동되는 url 설정
                 .successHandler(oAuth2AuthenticationSuccessHandler) // 인증 프로세스에 따라 사용자 정의 로직 실행
