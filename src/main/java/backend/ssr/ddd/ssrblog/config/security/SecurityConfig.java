@@ -46,9 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .exceptionHandling()
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                         .accessDeniedHandler(jwtAccessDeniedHandler)
-                .and()
-                    .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
-                        .antMatchers("/api/test").authenticated()
+//                .and()
+//                    .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
+//                        .antMatchers("/api/test").authenticated()
 //                        .antMatchers("/api/**").authenticated()
 //                        .antMatchers(HttpMethod.POST).authenticated() // 등록에 대한 Method 에 접근시 인증된 사용자만 접근 가능
 //                        .antMatchers(HttpMethod.PUT).authenticated() // 수정에 대한 Method 에 접근시 인증된 사용자만 접근 가능
