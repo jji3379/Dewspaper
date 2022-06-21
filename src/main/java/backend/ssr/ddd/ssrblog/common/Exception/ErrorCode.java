@@ -15,6 +15,7 @@ public enum ErrorCode {
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다"),
+    EXPIRE_TOKEN(UNAUTHORIZED, "토큰이 만료 되었습니다."),
     UNAUTHORIZED_MEMBER(UNAUTHORIZED, "현재 내 계정 정보가 존재하지 않습니다"),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */

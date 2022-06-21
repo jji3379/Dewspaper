@@ -6,6 +6,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -34,9 +36,9 @@ public class AccountController {
     }
 
     @GetMapping("/test")
-    public String tokenTest() {
+    public ResponseEntity<String> tokenTest() {
 
-        return "토큰토큰";
+        return new ResponseEntity<>("토큰토큰", HttpStatus.OK);
     }
 
 }
