@@ -22,7 +22,6 @@ public class AccountService {
     }
 
     public String getReissueToken(String refreshToken) {
-
         Account userInfo = accountRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN));
 

@@ -39,7 +39,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         JwtResponse jwt = new JwtResponse();
         jwt.createJwt(accessToken, refreshToken);
 
-        log.info("jwt : {}", jwt.getAccessToken());
+        log.info("email : {}, jwt : {}",accountRequest.getEmail(), jwt.getAccessToken());
+        log.info("email : {}, refresh-token : {}",accountRequest.getEmail(), jwt.getRefreshToken());
 
         String url = makeRedirectUrl(jwt);
 
