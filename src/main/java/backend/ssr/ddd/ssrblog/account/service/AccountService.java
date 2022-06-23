@@ -6,10 +6,12 @@ import backend.ssr.ddd.ssrblog.common.Exception.CustomException;
 import backend.ssr.ddd.ssrblog.common.Exception.ErrorCode;
 import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AccountService {
 
     private final AccountRepository accountRepository;
@@ -22,11 +24,15 @@ public class AccountService {
     }
 
     public String getReissueToken(String refreshToken) {
+        log.info("refreshToken : {}", refreshToken);
+
         Account userInfo = accountRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN));
+        log.info("refreshToken userInfo : {}", userInfo);
 
         String accessToken = jwtTokenProvider.createToken(userInfo.getEmail(), userInfo.getRole().getRole(), userInfo.getPlatform());
 
+        log.info("access-token : {}", accessToken);
         return accessToken;
     }
 
