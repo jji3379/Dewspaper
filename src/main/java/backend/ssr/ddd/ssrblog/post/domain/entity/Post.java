@@ -6,6 +6,7 @@ import backend.ssr.ddd.ssrblog.post.dto.PostResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor
+@ToString
 public class Post extends BaseTimeEntity {
 
     @Id

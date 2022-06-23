@@ -5,6 +5,7 @@ import backend.ssr.ddd.ssrblog.oauth.jwt.JwtResponse;
 import backend.ssr.ddd.ssrblog.oauth.mapper.AccountRequestMapper;
 import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import java.io.IOException;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@ToString
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtTokenProvider jwtTokenProvider;
     private final AccountRequestMapper accountRequestMapper;
