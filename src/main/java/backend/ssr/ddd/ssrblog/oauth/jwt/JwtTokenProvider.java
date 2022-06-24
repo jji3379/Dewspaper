@@ -27,8 +27,8 @@ public class JwtTokenProvider {
 //    private Long tokenValidMilisecond = 1000L * 60 * 60; // 1시간만 토큰 유효
 //    private Long refreshValidMilisecond = 1000L * 60 * 60 * 24 * 7; // 7일 토큰 유효
 
-    private Long tokenValidMilisecond = 1000L * 20; // 프론트 테스트 10초
-    private Long refreshValidMilisecond = 1000L * 60 * 2; // 프론트 테스트 20초
+    private Long tokenValidMilisecond = 1000L * 20; // 프론트 테스트 20초
+    private Long refreshValidMilisecond = 1000L * 60; // 프론트 테스트 60초
 
     @PostConstruct
     protected void init() {
@@ -50,8 +50,9 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String createRefreshToken(String email, String platform) {
+    public String createRefreshToken(String email, String roles, String platform) {
         Claims claims = Jwts.claims().setSubject(email);
+        claims.put("roles", roles);
         Date now = new Date();
 
         return Jwts.builder()
@@ -59,6 +60,20 @@ public class JwtTokenProvider {
                 .setIssuer(platform)
                 .setIssuedAt(now) // 토큰 발행일자
                 .setExpiration(new Date(now.getTime() + refreshValidMilisecond)) // set Expire Time
+                .signWith(SignatureAlgorithm.HS256, secretKey ) // 암호화 알고리즘, secret값 세팅
+                .compact();
+    }
+
+    public String reIssueToken(String refreshToken) {
+        Claims claims = Jwts.claims().setSubject(this.getUserEmail(refreshToken));
+        claims.put("roles", this.getUserRoles(refreshToken));
+        Date now = new Date();
+
+        return Jwts.builder()
+                .setClaims(claims) // 데이터
+                .setIssuer(this.getUserPlatform(refreshToken)) // 발급한 플랫폼
+                .setIssuedAt(now) // 토큰 발행일자
+                .setExpiration(new Date(now.getTime() + tokenValidMilisecond)) // set Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey ) // 암호화 알고리즘, secret값 세팅
                 .compact();
     }
@@ -81,6 +96,10 @@ public class JwtTokenProvider {
     // 토큰에서 회원 정보의 플랫폼
     public String getUserPlatform(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getIssuer();
+    }
+
+    public String getUserRoles(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("roles").toString();
     }
 
     // Request의 Header에서 token 값을 가져옵니다. "authorization" : "token"

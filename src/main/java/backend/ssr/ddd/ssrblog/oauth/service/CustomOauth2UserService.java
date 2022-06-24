@@ -68,12 +68,6 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                 .map(entity -> entity.update(attributes.getPlatform(), attributes.getName(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
 
-        boolean isValid = jwtTokenProvider.validateToken(account.getRefreshToken());
-
-        if (!isValid || account.getRefreshToken().isEmpty()) {
-            account.issueRefreshToken(jwtTokenProvider.createRefreshToken(attributes.getEmail(), attributes.getPlatform()));
-        }
-
-        return accountRepository.save(account);
+        return account;
     }
 }

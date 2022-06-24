@@ -50,10 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                        .antMatchers(HttpMethod.PUT).authenticated() // 수정에 대한 Method 에 접근시 인증된 사용자만 접근 가능
 //                        .antMatchers(HttpMethod.DELETE).authenticated() // 삭제에 대한 Method 에 접근시 인증된 사용자만 접근 가능
                 .and()
-                .exceptionHandling()
-                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                        .accessDeniedHandler(jwtAccessDeniedHandler)
-                .and()
                     .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                     .exceptionHandling()
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)

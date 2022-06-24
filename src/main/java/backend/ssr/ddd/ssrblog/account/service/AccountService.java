@@ -24,16 +24,12 @@ public class AccountService {
     }
 
     public String getReissueToken(String refreshToken) {
-        log.info("refreshToken : {}", refreshToken);
+        log.info("Get client refreshToken : {}", refreshToken);
 
-        Account userInfo = accountRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new CustomException(ErrorCode.INVALID_REFRESH_TOKEN));
-        log.info("refreshToken userInfo : {}", userInfo);
+        String reIssueToken = jwtTokenProvider.reIssueToken(refreshToken);
+        log.info("reIssueToken : {}", reIssueToken);
 
-        String accessToken = jwtTokenProvider.createToken(userInfo.getEmail(), userInfo.getRole().getRole(), userInfo.getPlatform());
-
-        log.info("access-token : {}", accessToken);
-        return accessToken;
+        return reIssueToken;
     }
 
 }
