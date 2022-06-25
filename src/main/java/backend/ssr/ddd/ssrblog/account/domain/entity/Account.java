@@ -17,6 +17,7 @@ import java.util.Collection;
 public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account_idx")
     private Long accountIdx;
 
     private String profileImg;

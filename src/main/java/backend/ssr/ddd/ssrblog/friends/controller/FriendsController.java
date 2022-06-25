@@ -47,11 +47,28 @@ public class FriendsController {
     }
 
     /**
+     * 친구 목록
+     */
+    @GetMapping("/friends/{accountIdx}") @ApiOperation(value = "친구 목록 리스트", notes = "친구 목록 리스트 (요청 보내고 수락 받은 요청, 요청 받고 수락한 요청 다 포함)")
+    @ApiImplicitParam(name = "accountIdx", required = true, value = "예 : 8")
+    public ResponseEntity<List<AccountResponse>> getFriendsList(@PathVariable Account accountIdx) {
+        List<Account> getFriendsList = friendService.getFriendsList(accountIdx);
+
+        List<AccountResponse> responseList = new ArrayList<>();
+
+        for (Account friends : getFriendsList) {
+            responseList.add(friends.toResponse());
+        }
+
+        return new ResponseEntity(responseList, HttpStatus.OK);
+    }
+
+    /**
      * 친구 요청 받은 목록 리스트
      */
     @GetMapping("/friends/{accepterIdx}/required") @ApiOperation(value = "친구 요청 받은 목록 리스트", notes = "요청 받은 목록 리스트 (수락해줘야 하기에 accpeterIdx 을 입력)")
     @ApiImplicitParam(name = "accepterIdx", required = true, value = "예 : 8")
-    public ResponseEntity<List<FriendsResponse>> getRequiredFriendsList(@PathVariable Long accepterIdx) {
+    public ResponseEntity<List<FriendsResponse>> getRequiredFriendsList(@PathVariable Account accepterIdx) {
         List<Friends> requiredFriendsList = friendService.getRequiredFriendsList(accepterIdx);
 
         List<FriendsResponse> responseList = new ArrayList<>();
@@ -68,7 +85,7 @@ public class FriendsController {
      */
     @GetMapping("/friends/{requesterIdx}/require") @ApiOperation(value = "내가 보낸 친구 요청 리스트", notes = "내가 보낸 (요청한) 목록 이기에  requesterIdx 을 입력)")
     @ApiImplicitParam(name = "requesterIdx", required = true, value = "예 : 21")
-    public ResponseEntity<List<FriendsResponse>> getRequireToFriendsList(@PathVariable Long requesterIdx) {
+    public ResponseEntity<List<FriendsResponse>> getRequireToFriendsList(@PathVariable Account requesterIdx) {
         List<Friends> requireToFriendsList = friendService.getRequireToFriendsList(requesterIdx);
 
         List<FriendsResponse> responseList = new ArrayList<>();
@@ -87,7 +104,7 @@ public class FriendsController {
     public ResponseEntity<FriendsResponse> newFriendRequest(@RequestBody FriendsRequest friendsRequest) {
         Friends newFriend = friendService.newFriendRequest(friendsRequest);
 
-        return new ResponseEntity(newFriend.toResponse(), HttpStatus.OK);
+        return new ResponseEntity(newFriend.toResponse(), HttpStatus.CREATED);
     }
 
     /**

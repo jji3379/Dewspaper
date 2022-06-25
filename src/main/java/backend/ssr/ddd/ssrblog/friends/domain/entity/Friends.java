@@ -1,14 +1,14 @@
 package backend.ssr.ddd.ssrblog.friends.domain.entity;
 
+import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.common.TimeEntity.RequestAcceptTimeEntity;
 import backend.ssr.ddd.ssrblog.friends.dto.FriendsResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
@@ -17,15 +17,19 @@ import javax.persistence.IdClass;
 public class Friends extends RequestAcceptTimeEntity {
 
     @Id
-    private Long requesterIdx;
+    @ManyToOne()
+    @JoinColumn(name = "requester_idx")
+    private Account requesterIdx;
 
     @Id
-    private Long accepterIdx;
+    @ManyToOne()
+    @JoinColumn(name = "accepter_idx")
+    private Account accepterIdx;
 
     private String accepted = "N";
 
     @Builder
-    public Friends(Long requesterIdx, Long accepterIdx, String accepted) {
+    public Friends(Account requesterIdx, Account accepterIdx, String accepted) {
         this.requesterIdx = requesterIdx;
         this.accepterIdx = accepterIdx;
         this.accepted = accepted;
@@ -37,8 +41,8 @@ public class Friends extends RequestAcceptTimeEntity {
 
     public FriendsResponse toResponse() {
         FriendsResponse build = FriendsResponse.builder()
-                .requesterIdx(requesterIdx)
-                .accepterIdx(accepterIdx)
+                .requesterIdx(requesterIdx.getAccountIdx())
+                .accepterIdx(accepterIdx.getAccountIdx())
                 .accepted(accepted)
                 .requestDateTime(getRequestDateTime())
                 .acceptedDateTime(getAcceptedDateTime())

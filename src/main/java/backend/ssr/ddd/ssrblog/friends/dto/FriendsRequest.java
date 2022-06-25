@@ -1,6 +1,7 @@
 package backend.ssr.ddd.ssrblog.friends.dto;
 
 
+import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.friends.domain.entity.Friends;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,11 +30,19 @@ public class FriendsRequest {
 
     public Friends toEntity() {
         Friends build = Friends.builder()
-                .requesterIdx(requesterIdx)
-                .accepterIdx(accepterIdx)
+                .requesterIdx(Account.builder().accountIdx(requesterIdx).build())
+                .accepterIdx(Account.builder().accountIdx(accepterIdx).build())
                 .accepted("N")
                 .build();
 
         return build;
+    }
+
+    public Account getRequesterIdx() {
+        return Account.builder().accountIdx(requesterIdx).build();
+    }
+
+    public Account getAccepterIdx() {
+        return Account.builder().accountIdx(accepterIdx).build();
     }
 }
