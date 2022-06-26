@@ -3,13 +3,13 @@ package backend.ssr.ddd.ssrblog.friends.controller;
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
-import backend.ssr.ddd.ssrblog.account.service.AccountService;
 import backend.ssr.ddd.ssrblog.friends.domain.entity.Friends;
 import backend.ssr.ddd.ssrblog.friends.dto.FriendsRequest;
 import backend.ssr.ddd.ssrblog.friends.dto.FriendsResponse;
 import backend.ssr.ddd.ssrblog.friends.service.FriendService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -120,10 +120,16 @@ public class FriendsController {
     /**
      * 친구 삭제
      */
-    @DeleteMapping("/friends") @ApiOperation(value = "친구 삭제", notes = "requesterIdx 와 accepterIdx 를 입력하여 친구를 삭제한다. (요청을 보내는 중일 때 1번 더 클릭시, 친구 상태에서 1번 더 클릭시 삭제)")
-    public void deleteFriend(@RequestBody FriendsRequest friendsRequest) {
+    @DeleteMapping("/friends/{requesterIdx}/{accepterIdx}") @ApiOperation(value = "친구 삭제", notes = "requesterIdx 와 accepterIdx 를 입력하여 친구를 삭제한다. (요청을 보내는 중일 때 1번 더 클릭시, 친구 상태에서 1번 더 클릭시 삭제)")
+    @ApiImplicitParams(
+        {
+            @ApiImplicitParam(name = "requesterIdx", required = true, value = "예 : 8"),
+            @ApiImplicitParam(name = "accepterIdx", required = true, value = "예 : 21")
+        }
+    )
+    public void deleteFriend(@PathVariable Account requesterIdx, @PathVariable Account accepterIdx) {
 
-        friendService.deleteFriend(friendsRequest);
+        friendService.deleteFriend(requesterIdx, accepterIdx);
     }
 
 }

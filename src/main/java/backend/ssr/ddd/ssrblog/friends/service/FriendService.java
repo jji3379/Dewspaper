@@ -149,8 +149,8 @@ public class FriendService {
     /**
      * 친구 삭제
      */
-    public void deleteFriend(FriendsRequest friendsRequest) {
-        Friends friends = friendsRepository.findByRequesterIdxAndAccepterIdx(friendsRequest.getRequesterIdx(), friendsRequest.getAccepterIdx())
+    public void deleteFriend(Account requesterIdx, Account accepterIdx) {
+        Friends friends = friendsRepository.findByRequesterIdxAndAccepterIdx(requesterIdx, accepterIdx)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST));
 
         friendsRepository.delete(friends);
