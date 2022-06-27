@@ -84,7 +84,7 @@ public class FriendsController {
      * 내가 보낸 친구 요청 리스트
      */
     @GetMapping("/friends/{requesterIdx}/require") @ApiOperation(value = "내가 보낸 친구 요청 리스트", notes = "내가 보낸 (요청한) 목록 이기에  requesterIdx 을 입력)")
-    @ApiImplicitParam(name = "requesterIdx", required = true, value = "예 : 21")
+    @ApiImplicitParam(name = "requesterIdx", required = true, value = "예 : 11")
     public ResponseEntity<List<FriendsResponse>> getRequireToFriendsList(@PathVariable Account requesterIdx) {
         List<Friends> requireToFriendsList = friendService.getRequireToFriendsList(requesterIdx);
 
@@ -120,11 +120,11 @@ public class FriendsController {
     /**
      * 친구 삭제
      */
-    @DeleteMapping("/friends/{requesterIdx}/{accepterIdx}") @ApiOperation(value = "친구 삭제", notes = "requesterIdx 와 accepterIdx 를 입력하여 친구를 삭제한다. (요청을 보내는 중일 때 1번 더 클릭시, 친구 상태에서 1번 더 클릭시 삭제)")
+    @DeleteMapping("/friends/{requesterIdx}/{accepterIdx}") @ApiOperation(value = "친구 삭제", notes = "requesterIdx 와 accepterIdx 를 입력하여 친구를 삭제한다. (순서 상관 없음, 요청을 보내는 중일 때 1번 더 클릭시, 친구 상태에서 1번 더 클릭시 삭제)")
     @ApiImplicitParams(
         {
             @ApiImplicitParam(name = "requesterIdx", required = true, value = "예 : 8"),
-            @ApiImplicitParam(name = "accepterIdx", required = true, value = "예 : 21")
+            @ApiImplicitParam(name = "accepterIdx", required = true, value = "예 : 11")
         }
     )
     public void deleteFriend(@PathVariable Account requesterIdx, @PathVariable Account accepterIdx) {

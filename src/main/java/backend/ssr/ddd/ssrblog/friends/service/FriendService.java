@@ -14,7 +14,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -90,31 +89,13 @@ public class FriendService {
         accountRepository.findById(friendsRequest.getAccepterIdx().getAccountIdx())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCEPTER));
 
-        /**
-         * QueryDSL
-         */
-        QFriends qFriends = QFriends.friends;
-
-        // 이미 상대방이 요청을 보낸 후 수락하여 친구가 된 경우 요청을 받을 수 없게 한다.
-        Optional<List<Friends>> isFriend = Optional.ofNullable(jpaQueryFactory.selectFrom(qFriends)
-                .where(qFriends.requesterIdx.eq(friendsRequest.getAccepterIdx())
-                        .and(qFriends.accepterIdx.eq(friendsRequest.getRequesterIdx()))
-                        .and(qFriends.accepted.eq("Y"))
-                        .or(qFriends.requesterIdx.eq(friendsRequest.getRequesterIdx())
-                                .and(qFriends.accepterIdx.eq(friendsRequest.getAccepterIdx()))
-                                .and(qFriends.accepted.eq("Y")))
-                )
-                .fetch());
-
-        // 이미 수락된 요청이 있을 경우
-        if (!isFriend.get().isEmpty()) {
-            throw new CustomException(ErrorCode.DUPLICATE_FRIEND);
-        }
-
+        // 이미 요청을 보낸 경우
         Optional<Friends> existRequest = friendsRepository.findByRequesterIdxAndAccepterIdx(friendsRequest.getRequesterIdx(), friendsRequest.getAccepterIdx());
+        // 상대방이 요청을 보낸 경우
+        Optional<Friends> existAcceptRequest = friendsRepository.findByRequesterIdxAndAccepterIdx(friendsRequest.getAccepterIdx(), friendsRequest.getRequesterIdx());
 
         // 이미 같은 요청을 보냈을 경우
-        if (existRequest.isPresent()) {
+        if (existRequest.isPresent() || existAcceptRequest.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE_FRIEND_REQUEST);
         } else {
             return friendsRepository.save(friendsRequest.toEntity());
@@ -150,9 +131,17 @@ public class FriendService {
      * 친구 삭제
      */
     public void deleteFriend(Account requesterIdx, Account accepterIdx) {
-        Friends friends = friendsRepository.findByRequesterIdxAndAccepterIdx(requesterIdx, accepterIdx)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST));
+        Optional<Friends> requesterFriend = friendsRepository.findByRequesterIdxAndAccepterIdx(requesterIdx, accepterIdx);
+        Optional<Friends> accepterFriend = friendsRepository.findByRequesterIdxAndAccepterIdx(accepterIdx, requesterIdx);
 
-        friendsRepository.delete(friends);
+        // 둘 다 요청이 없었을 경우
+        if (!requesterFriend.isPresent() && !accepterFriend.isPresent()) {
+            throw  new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST);
+        } else if (requesterFriend.isPresent()) {
+            friendsRepository.delete(requesterFriend.get());
+        } else if (accepterFriend.isPresent()) {
+            friendsRepository.delete(accepterFriend.get());
+        }
+
     }
 }
