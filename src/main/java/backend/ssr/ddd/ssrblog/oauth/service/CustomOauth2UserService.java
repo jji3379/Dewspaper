@@ -68,6 +68,8 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                 .map(entity -> entity.update(attributes.getPlatform(), attributes.getName(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
 
+        accountRepository.save(account);
+
         return account;
     }
 }
