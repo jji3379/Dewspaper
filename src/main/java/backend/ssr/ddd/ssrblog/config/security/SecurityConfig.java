@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
                 .antMatchers("/api/test").authenticated()
+                .antMatchers("/api/me").authenticated()
                 .anyRequest().permitAll()
 //                        .antMatchers("/api/**").authenticated()
 //                        .antMatchers(HttpMethod.POST).authenticated() // 등록에 대한 Method 에 접근시 인증된 사용자만 접근 가능

@@ -32,4 +32,9 @@ public class AccountService {
         return reIssueToken;
     }
 
+    public Account getAccountInfo(String email, String platform) {
+
+        return accountRepository.findByEmailAndPlatform(email, platform).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
+    }
+
 }

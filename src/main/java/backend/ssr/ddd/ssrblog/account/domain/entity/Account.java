@@ -1,5 +1,6 @@
 package backend.ssr.ddd.ssrblog.account.domain.entity;
 
+import backend.ssr.ddd.ssrblog.account.dto.AccountMeResponse;
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import backend.ssr.ddd.ssrblog.account.dto.Role;
 import lombok.Builder;
@@ -52,6 +53,15 @@ public class Account implements UserDetails {
                 .profileImg(profileImg)
                 .withdrawal(withdrawal)
                 .build();
+        return build;
+    }
+
+    public AccountMeResponse toResponseMe() {
+        AccountMeResponse build = AccountMeResponse.builder()
+                .name(name)
+                .profileImg(profileImg)
+                .build();
+
         return build;
     }
 
