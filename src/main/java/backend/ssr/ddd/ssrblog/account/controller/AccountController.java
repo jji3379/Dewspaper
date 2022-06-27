@@ -29,9 +29,9 @@ public class AccountController {
     }
 
     @PostMapping("/refresh-token") @ApiOperation(value = "토큰 재발급", notes = "refresh-token 을 header 에 입력하여 새로운 토큰을 발급 받는다.")
-    @ApiImplicitParam(name = "refresh-token", value = "예 : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqamkzMzc5QG5hdmVyLmNvbSIsImlzcyI6Im5hdmVyIiwiaWF0IjoxNjU1Mzk0OTY4LCJleHAiOjE2NTU5OTk3Njh9.j-HAHp05U6WG20dH9gVtqB64e5TAB7ECliqEhuVVCcM", required = true, dataType = "String", paramType = "header")
+    @ApiImplicitParam(name = "refreshToken", value = "예 : {\"refreshToken\":\"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqamkzMzc5QGdtYWlsLmNvbSIsInJvbGVzIjoiVVNFUiIsImlzcyI6Imdvb2dsZSIsImlhdCI6MTY1NjMwMTk3OSwiZXhwIjoxNjU2MzMwNzc5fQ.tGys2dWW0sdDtKKsoBolnth1VDTda-ORFPDVci-yIqM\"}", required = true)
     public String getRefreshToken(@RequestBody Map<String, String> refreshToken) {
-        String reissueToken = accountService.getReissueToken(refreshToken.get("refresh-token"));
+        String reissueToken = accountService.getReissueToken(refreshToken.get("refreshToken"));
 
         return reissueToken;
     }
