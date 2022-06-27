@@ -65,7 +65,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
     private Account saveOrUpdate(OAuth2Attribute attributes) {
         Account account = accountRepository.findByEmailAndPlatform(attributes.getEmail(), attributes.getPlatform())
-                .map(entity -> entity.update(attributes.getPlatform(), attributes.getName(), attributes.getPicture()))
+                .map(entity -> entity.update(attributes.getPlatform(), attributes.getName()))
                 .orElse(attributes.toEntity());
 
         accountRepository.save(account);

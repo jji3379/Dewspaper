@@ -65,10 +65,9 @@ public class Account implements UserDetails {
         return build;
     }
 
-    public Account update(String platform, String name, String profileImg) {
+    public Account update(String platform, String name) {
         this.platform = platform;
         this.name = name;
-        this.profileImg = profileImg;
 
         return this;
     }

@@ -19,7 +19,6 @@ public class OAuth2Attribute {
     private String attributeKey;
     private String email;
     private String name;
-    private String picture;
 
     static OAuth2Attribute of(String provider, String attributeKey,
                               Map<String, Object> attributes) {
@@ -41,7 +40,6 @@ public class OAuth2Attribute {
                 .platform(provider)
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
-                .picture((String)attributes.get("picture"))
                 .attributes(attributes)
                 .attributeKey(attributeKey)
                 .build();
@@ -55,7 +53,6 @@ public class OAuth2Attribute {
                 .platform(provider)
                 .name((String) kakaoProfile.get("nickname"))
                 .email((String) kakaoAccount.get("email"))
-                .picture((String)kakaoProfile.get("profile_image_url"))
                 .attributes(kakaoAccount)
                 .attributeKey(attributeKey)
                 .build();
@@ -68,7 +65,6 @@ public class OAuth2Attribute {
                 .platform(provider)
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
-                .picture((String) response.get("profile_image"))
                 .attributes(response)
                 .attributeKey(attributeKey)
                 .build();
@@ -79,7 +75,6 @@ public class OAuth2Attribute {
                 .platform(platform)
                 .name(name)
                 .email(email)
-                .profileImg(picture)
                 .role(Role.USER)
                 .build();
     }
