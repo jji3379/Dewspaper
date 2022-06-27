@@ -18,7 +18,7 @@ public class FriendsResponse {
     @ApiModelProperty(value = "신청 회원", example = "8", position = 1)
     private Long requesterIdx;
 
-    @ApiModelProperty(value = "수락 회원", example = "21", position = 2)
+    @ApiModelProperty(value = "수락 회원", example = "11", position = 2)
     private Long accepterIdx;
 
     @ApiModelProperty(value = "수락 여부", example = "N", position = 3)

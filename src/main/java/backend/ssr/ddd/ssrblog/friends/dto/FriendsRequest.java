@@ -19,7 +19,7 @@ public class FriendsRequest {
     private Long requesterIdx;
 
     @NotBlank(message = "수락 회원은 필수 입력 항목입니다.")
-    @ApiModelProperty(value = "수락 회원", required = true, example = "21", position = 2)
+    @ApiModelProperty(value = "수락 회원", required = true, example = "11", position = 2)
     private Long accepterIdx;
 
     @Builder
