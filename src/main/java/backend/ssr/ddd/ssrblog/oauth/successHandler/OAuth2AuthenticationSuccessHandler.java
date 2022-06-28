@@ -44,12 +44,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("email : {}, jwt : {}",accountRequest.getEmail(), jwt.getAccessToken());
         log.info("email : {}, refresh-token : {}",accountRequest.getEmail(), jwt.getRefreshToken());
 
-        String url = "";
-        if (request.getRequestURI().contains("dddssrbackend")) {
-            url = makeRedirectUrlServer(jwt);
-        } else {
-            url = makeRedirectUrl(jwt);
-        }
+        String url = makeRedirectUrl(jwt);
 
         getRedirectStrategy().sendRedirect(request, response, url);
     }
@@ -57,12 +52,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private String makeRedirectUrl(JwtResponse jwt) {
 
         return UriComponentsBuilder.fromUriString("http://localhost:3000/callback/login?token=" + jwt.getAccessToken() + "&refreshtoken=" + jwt.getRefreshToken())
-                .build().toUriString();
-    }
-
-    private String makeRedirectUrlServer(JwtResponse jwt) {
-
-        return UriComponentsBuilder.fromUriString("http://dddssrbackend-env.ap-northeast-2.elasticbeanstalk.com/callback/login?token=" + jwt.getAccessToken() + "&refreshtoken=" + jwt.getRefreshToken())
                 .build().toUriString();
     }
 }
