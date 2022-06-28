@@ -17,12 +17,12 @@ import javax.persistence.*;
 public class Friends extends RequestAcceptTimeEntity {
 
     @Id
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "requester_idx")
     private Account requesterIdx;
 
     @Id
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "accepter_idx")
     private Account accepterIdx;
 

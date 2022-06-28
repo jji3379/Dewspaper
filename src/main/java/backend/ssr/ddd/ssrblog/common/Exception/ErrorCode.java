@@ -14,6 +14,7 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "refresh-token 이 유효하지 않습니다"),
     DUPLICATE_FRIEND(BAD_REQUEST, "이미 친구 상태입니다"),
     DUPLICATE_FRIEND_REQUEST(BAD_REQUEST, "이미 친구 요청을 보낸 상태입니다"),
+    INVALID_WRITER(BAD_REQUEST, "작성자와 일치하지 않습니다"),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다"),
@@ -25,6 +26,7 @@ public enum ErrorCode {
     NOT_FOUND_REQUESTER(NOT_FOUND, "친구 신청 회원의 정보가 존재하지 않습니다"),
     NOT_FOUND_ACCEPTER(NOT_FOUND, "친구 수락 회원의 정보가 존재하지 않습니다"),
     NOT_FOUND_POST(NOT_FOUND, "요청하신 게시물이 존재하지 않습니다"),
+    NOT_FOUND_COMMNET(NOT_FOUND, "요청하신 댓글이 존재하지 않습니다"),
     NOT_FOUND_FRIEND_REQUEST(NOT_FOUND, "요청하신 친구요청이 존재하지 않습니다"),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
