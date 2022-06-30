@@ -48,7 +48,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String url = "";
 
-        if (request.getRequestURL().toString().contains("dewspaper")) {
+        if (request.getRequestURL().toString().contains("dddssrbackend")) {
             url = makeDomainRedirectUrl(jwt);
         } else {
              url = makeRedirectUrl(jwt);
