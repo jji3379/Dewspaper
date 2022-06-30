@@ -12,7 +12,7 @@ spring:
             client-name: Naver
           kakao:
             client-authentication-method: POST
-            redirect-uri: http://dddssrbackend-env.ap-northeast-2.elasticbeanstalk.com/login/oauth2/code/kakao
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             client-id: 7f648761f5fad8a48486d6360bed75dd
             scope: account_email, profile_nickname

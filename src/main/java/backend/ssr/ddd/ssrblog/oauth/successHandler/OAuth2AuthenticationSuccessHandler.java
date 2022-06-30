@@ -52,11 +52,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String url = "";
 
-        if (request.getRequestURL().toString().contains("dddssrbackend")) {
-            url = makeDomainRedirectUrl(jwt);
-        } else {
-             url = makeRedirectUrl(jwt);
-        }
+
 
         getRedirectStrategy().sendRedirect(request, response, url);
     }
@@ -64,12 +60,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private String makeRedirectUrl(JwtResponse jwt) {
 
         return UriComponentsBuilder.fromUriString("http://localhost:3000/callback/login?token=" + jwt.getAccessToken() + "&refreshtoken=" + jwt.getRefreshToken())
-                .build().toUriString();
-    }
-
-    private String makeDomainRedirectUrl(JwtResponse jwt) {
-
-        return UriComponentsBuilder.fromUriString("http://www.dewspaper.com/callback/login?token=" + jwt.getAccessToken() + "&refreshtoken=" + jwt.getRefreshToken())
                 .build().toUriString();
     }
 }
