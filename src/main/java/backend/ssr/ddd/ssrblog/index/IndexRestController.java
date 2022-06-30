@@ -16,11 +16,8 @@ public class IndexRestController {
 
     @PostMapping("/upload")
     public String uploadtest(@RequestParam("uploadfile") MultipartFile multipartFile) throws Exception{
-        try {
-            s3Uploader.uploadFiles(multipartFile, "static");
-        } catch (Exception e) { return "fail"; }
 
-        return "main";
+           return s3Uploader.uploadFiles(multipartFile, "static");
     }
 
 }
