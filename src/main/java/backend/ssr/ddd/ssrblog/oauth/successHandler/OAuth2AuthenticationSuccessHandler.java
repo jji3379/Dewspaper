@@ -30,10 +30,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
-        //test
-        log.error(String.valueOf(request.getRequestURL()));
-
-
         //login 성공한 사용자 목록.
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
@@ -48,18 +44,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("email : {}, jwt : {}",accountRequest.getEmail(), jwt.getAccessToken());
         log.info("email : {}, refresh-token : {}",accountRequest.getEmail(), jwt.getRefreshToken());
 
-        log.info("requset URL : {}", request.getRequestURL());
-
-        String url = "";
-
-
+        String url = makeRedirectUrl(jwt);
 
         getRedirectStrategy().sendRedirect(request, response, url);
     }
 
     private String makeRedirectUrl(JwtResponse jwt) {
 
-        return UriComponentsBuilder.fromUriString("http://localhost:3000/callback/login?token=" + jwt.getAccessToken() + "&refreshtoken=" + jwt.getRefreshToken())
+        return UriComponentsBuilder.fromUriString("http://www.dewspaper.com/callback/login?token=" + jwt.getAccessToken() + "&refreshtoken=" + jwt.getRefreshToken())
                 .build().toUriString();
     }
 }
