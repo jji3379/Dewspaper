@@ -6,14 +6,23 @@ import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
 import backend.ssr.ddd.ssrblog.post.domain.repository.PostRepository;
 import backend.ssr.ddd.ssrblog.post.dto.PostRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostService {
 
     private final PostRepository postRepository;
@@ -24,9 +33,21 @@ public class PostService {
      * - 삭제 여부 (deleted = "N")
      */
     @Transactional(readOnly = true)
-    public List<Post> getPostList(Pageable pageable) {
+    public Page<Post> getPostList(Pageable pageable, String term) {
+        Page<Post> postList = null;
+        LocalDateTime now = LocalDateTime.now();
 
-        return postRepository.findAllByPrivatedAndDeleted(pageable, "N", "N");
+        if (term.equals("weekly")) {
+            LocalDateTime week = now.minusWeeks(1);
+            postList = postRepository.findAllByPrivatedAndDeletedAndDateTimeBetween(pageable, "N", "N", week, now);
+        } else if (term.equals("monthly")) {
+            LocalDateTime month = now.minusMonths(1);
+            postList = postRepository.findAllByPrivatedAndDeletedAndDateTimeBetween(pageable, "N", "N", month, now);
+        } else {
+            postList = postRepository.findAllByPrivatedAndDeleted(pageable, "N", "N");
+        }
+
+        return postList;
     }
 
     /**
