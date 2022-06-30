@@ -30,6 +30,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
 
+        //test
+        log.error(String.valueOf(request.getRequestURL()));
+
+
         //login 성공한 사용자 목록.
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 

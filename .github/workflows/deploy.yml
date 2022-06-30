@@ -49,10 +49,10 @@ jobs:
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@v20
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: ddd-ssr-backend
-          environment_name: Dddssrbackend-env
+          aws_access_key: AKIA2C2B7KJSXFSRPXRV
+          aws_secret_key: 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
+          application_name: login-test
+          environment_name: Logintest-env
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
