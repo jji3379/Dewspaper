@@ -56,7 +56,7 @@ public class PostController {
         }
 
         Post post = postService.savePost(postRequest);
-        writerService.saveWriter(post, postRequest.getCowriter());
+//        writerService.saveWriter(post, postRequest.getCowriter());
 
         return new ResponseEntity(post.toResponse(), HttpStatus.CREATED);
     }
