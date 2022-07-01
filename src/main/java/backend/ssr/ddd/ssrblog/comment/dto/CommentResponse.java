@@ -1,5 +1,6 @@
 package backend.ssr.ddd.ssrblog.comment.dto;
 
+import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class CommentResponse {
     private Long postIdx;
 
     @ApiModelProperty(value = "회원 번호", example = "8", position = 3)
-    private Long accountIdx;
+    private AccountResponse accountIdx;
 
     @ApiModelProperty(value = "댓글 내용", example = "살려줘", position = 4)
     private String comment;
@@ -28,7 +29,7 @@ public class CommentResponse {
     private LocalDateTime dateTime;
 
     @Builder
-    public CommentResponse(Long commentIdx, Long postIdx, Long accountIdx, String comment, LocalDateTime dateTime) {
+    public CommentResponse(Long commentIdx, Long postIdx, AccountResponse accountIdx, String comment, LocalDateTime dateTime) {
         this.commentIdx = commentIdx;
         this.postIdx = postIdx;
         this.accountIdx = accountIdx;
