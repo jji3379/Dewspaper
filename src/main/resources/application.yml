@@ -13,6 +13,10 @@ spring:
         format_sql: true
   profiles:
     include: oauth
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
 logging:
   level:
     org.hibernate.SQL: debug
