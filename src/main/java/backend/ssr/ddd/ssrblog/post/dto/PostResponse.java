@@ -34,14 +34,16 @@ public class PostResponse {
     @ApiModelProperty(value = "비공개 여부", example = "N", position = 7)
     private String privated;
 
-    @ApiModelProperty(value = "작성 일시", example = "2022-06-09 00:01:37", position = 8)
-    private LocalDateTime dateTime;
-    @ApiModelProperty(value = "삭제 여부", example = "N", position = 9)
-    private String deleted;
+    @ApiModelProperty(value = "작성 일시", example = "2022-06-28 03:01:35", position = 8)
+    private LocalDateTime createDate;
 
+    @ApiModelProperty(value = "수정 일시", example = "2022-06-28 03:01:35", position = 9)
+    private LocalDateTime updateDate;
+    @ApiModelProperty(value = "삭제 여부", example = "N", position = 10)
+    private String delYn;
 
     @Builder
-    public PostResponse(Long postIdx, String title, String contents, String thumbnailImg, String thumbnailContents, int boardCount, String privated, String deleted, LocalDateTime dateTime) {
+    public PostResponse(Long postIdx, String title, String contents, String thumbnailImg, String thumbnailContents, int boardCount, String privated, LocalDateTime createDate, LocalDateTime updateDate, String delYn) {
         this.postIdx = postIdx;
         this.title = title;
         this.contents = contents;
@@ -49,7 +51,8 @@ public class PostResponse {
         this.thumbnailContents = thumbnailContents;
         this.boardCount = boardCount;
         this.privated = privated;
-        this.deleted = deleted;
-        this.dateTime = dateTime;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+        this.delYn = delYn;
     }
 }

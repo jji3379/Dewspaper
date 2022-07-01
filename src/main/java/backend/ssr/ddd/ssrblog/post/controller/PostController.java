@@ -28,13 +28,6 @@ public class PostController {
     private final PostService postService;
     private final WriterService writerService;
 
-    @GetMapping("/search/{search}") @ApiOperation(value = "게시물 전체 정보 조회", notes = "")
-    public List<Post> getSearchAccountsAndPosts(@PathVariable String search) {
-        postService.searchAccountAndPost(search);
-
-        return postService.searchAccountAndPost(search);
-    }
-
     @GetMapping("/posts/{term}") @ApiOperation(value = "게시물 전체 정보 조회", notes = "게시물 전체를 페이징 처리하여 조회한다. term 에 all(전체), weekly(1주일), monthly(한 달) 을 입력하여 기간별 게시물을 조회한다. (공개 되어있으면서 (privated = N), 삭제 되지 않은 게시물들만 조회 (deleted = N))")
     @ApiImplicitParam(name = "term", required = true, value = "예 : weekly")
     public ResponseEntity<Page<PostResponse>> getPostPagingList(Pageable pageable, @PathVariable String term) {

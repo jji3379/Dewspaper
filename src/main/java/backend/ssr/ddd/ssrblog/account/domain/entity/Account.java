@@ -3,6 +3,7 @@ package backend.ssr.ddd.ssrblog.account.domain.entity;
 import backend.ssr.ddd.ssrblog.account.dto.AccountMeResponse;
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import backend.ssr.ddd.ssrblog.account.dto.Role;
+import backend.ssr.ddd.ssrblog.common.TimeEntity.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +16,11 @@ import java.util.Collection;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Account implements UserDetails {
+public class Account extends BaseTimeEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_idx")
     private Long accountIdx;
-
-    private String profileImg;
 
     private String platform;
 
@@ -29,31 +28,45 @@ public class Account implements UserDetails {
 
     private String name;
 
+    private String profileImg;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String emailAg;
+
+    private String alarmAg;
+
     private String withdrawal = "N";
 
-    @Builder
-    public Account(Long accountIdx, String profileImg, String platform, String email, String name, Role role) {
-        this.accountIdx = accountIdx;
-        this.profileImg = profileImg;
-        this.platform = platform;
-        this.email = email;
-        this.name = name;
-        this.role = role;
-    }
     public AccountResponse toResponse() {
         AccountResponse build = AccountResponse.builder()
                 .accountIdx(accountIdx)
                 .platform(platform)
                 .email(email)
                 .name(name)
-                .role(role.getRole())
                 .profileImg(profileImg)
+                .role(role.getRole())
+                .emailAg(emailAg)
+                .alarmAg(alarmAg)
+                .createDate(getCreateDate())
+                .updateDate(getUpdateDate())
                 .withdrawal(withdrawal)
                 .build();
         return build;
+    }
+
+    @Builder
+    public Account(Long accountIdx, String platform, String email, String name, String profileImg, Role role, String emailAg, String alarmAg, String withdrawal) {
+        this.accountIdx = accountIdx;
+        this.platform = platform;
+        this.email = email;
+        this.name = name;
+        this.profileImg = profileImg;
+        this.role = role;
+        this.emailAg = emailAg;
+        this.alarmAg = alarmAg;
+        this.withdrawal = withdrawal;
     }
 
     public AccountMeResponse toResponseMe() {

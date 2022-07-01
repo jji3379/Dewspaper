@@ -1,8 +1,11 @@
 package backend.ssr.ddd.ssrblog.account.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 public class AccountResponse {
@@ -14,8 +17,16 @@ public class AccountResponse {
     private String profileImg;
     private String withdrawal;
 
+    private String emailAg;
+
+    private String alarmAg;
+
+    private LocalDateTime createDate;
+
+    private LocalDateTime updateDate;
+
     @Builder
-    public AccountResponse(Long accountIdx, String profileImg, String platform, String email, String name, String role, String withdrawal) {
+    public AccountResponse(Long accountIdx, String email, String platform, String name, String role, String profileImg, String withdrawal, String emailAg, String alarmAg, LocalDateTime createDate, LocalDateTime updateDate) {
         this.accountIdx = accountIdx;
         this.email = email;
         this.platform = platform;
@@ -23,5 +34,9 @@ public class AccountResponse {
         this.role = role;
         this.profileImg = profileImg;
         this.withdrawal = withdrawal;
+        this.emailAg = emailAg;
+        this.alarmAg = alarmAg;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 }

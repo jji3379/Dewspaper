@@ -35,7 +35,7 @@ public class Post extends BaseTimeEntity {
 
     private String privated;
 
-    private String deleted;
+    private String delYn;
 
     public void update(PostRequest postRequest) {
         this.thumbnailImg = postRequest.getThumbnailImg();
@@ -49,11 +49,11 @@ public class Post extends BaseTimeEntity {
     }
 
     public void delete() {
-        this.deleted = "Y";
+        this.delYn = "Y";
     }
 
     @Builder
-    public Post(Long postIdx, String thumbnailImg, String thumbnailContents, String title, String contents, int boardCount, String privated, String deleted) {
+    public Post(Long postIdx, String thumbnailImg, String thumbnailContents, String title, String contents, int boardCount, String privated, String delYn) {
         this.postIdx = postIdx;
         this.thumbnailImg = thumbnailImg;
         this.thumbnailContents = thumbnailContents;
@@ -61,7 +61,7 @@ public class Post extends BaseTimeEntity {
         this.contents = contents;
         this.boardCount = boardCount;
         this.privated = privated;
-        this.deleted = deleted;
+        this.delYn = delYn;
     }
 
     public PostResponse toResponse() {
@@ -73,8 +73,9 @@ public class Post extends BaseTimeEntity {
                 .contents(contents)
                 .boardCount(boardCount)
                 .privated(privated)
-                .deleted(deleted)
-                .dateTime(getDateTime())
+                .delYn(delYn)
+                .createDate(getCreateDate())
+                .updateDate(getUpdateDate())
                 .build();
 
         return build;

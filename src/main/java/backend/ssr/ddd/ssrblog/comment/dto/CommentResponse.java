@@ -26,14 +26,21 @@ public class CommentResponse {
     private String comment;
 
     @ApiModelProperty(value = "작성 일시", example = "2022-06-28 03:01:35", position = 5)
-    private LocalDateTime dateTime;
+    private LocalDateTime createDate;
+
+    @ApiModelProperty(value = "수정 일시", example = "2022-06-28 03:01:35", position = 6)
+    private LocalDateTime updateDate;
+
+    @ApiModelProperty(value = "삭제 여부", example = "N", position = 7)
+    private String delYn;
 
     @Builder
-    public CommentResponse(Long commentIdx, Long postIdx, AccountResponse accountIdx, String comment, LocalDateTime dateTime) {
+    public CommentResponse(Long commentIdx, Long postIdx, AccountResponse accountIdx, String comment, LocalDateTime createDate, LocalDateTime updateDate) {
         this.commentIdx = commentIdx;
         this.postIdx = postIdx;
         this.accountIdx = accountIdx;
         this.comment = comment;
-        this.dateTime = dateTime;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
     }
 }

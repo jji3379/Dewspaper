@@ -12,9 +12,9 @@ import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Page<Post> findAllByPrivatedAndDeleted(Pageable pageable, String privated, String deleted);
+    Page<Post> findAllByPrivatedAndDelYn(Pageable pageable, String privated, String delYn);
 
-    Optional<Post> findPostByPostIdxAndDeleted(Long postIdx, String deleted);
+    Optional<Post> findPostByPostIdxAndDelYn(Long postIdx, String delYn);
 
-    Page<Post> findAllByPrivatedAndDeletedAndDateTimeBetween(Pageable pageable, String privated, String deleted, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    Page<Post> findAllByPrivatedAndDelYnAndCreateDateBetween(Pageable pageable, String privated, String delYn, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }

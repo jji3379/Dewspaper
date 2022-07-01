@@ -2,21 +2,15 @@ package backend.ssr.ddd.ssrblog.account.controller;
 
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.account.dto.AccountMeResponse;
-import backend.ssr.ddd.ssrblog.account.dto.AccountRequest;
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import backend.ssr.ddd.ssrblog.account.service.AccountService;
-import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
-import backend.ssr.ddd.ssrblog.oauth.mapper.AccountRequestMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Map;
 
 
@@ -27,10 +21,6 @@ import java.util.Map;
 public class AccountController {
 
     private final AccountService accountService;
-
-    private final JwtTokenProvider jwtTokenProvider;
-
-    private final AccountRequestMapper accountRequestMapper;
 
     @GetMapping("/account/{accountIdx}") @ApiOperation(value = "회원 정보 조회", notes = "회원의 상세 정보를 조회 한다.")
     @ApiImplicitParam(name = "accountIdx", required = true, value = "예 : 1")

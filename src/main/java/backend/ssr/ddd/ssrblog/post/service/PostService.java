@@ -8,17 +8,11 @@ import backend.ssr.ddd.ssrblog.post.dto.PostRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,12 +33,12 @@ public class PostService {
 
         if (term.equals("weekly")) {
             LocalDateTime week = now.minusWeeks(1);
-            postList = postRepository.findAllByPrivatedAndDeletedAndDateTimeBetween(pageable, "N", "N", week, now);
+            postList = postRepository.findAllByPrivatedAndDelYnAndCreateDateBetween(pageable, "N", "N", week, now);
         } else if (term.equals("monthly")) {
             LocalDateTime month = now.minusMonths(1);
-            postList = postRepository.findAllByPrivatedAndDeletedAndDateTimeBetween(pageable, "N", "N", month, now);
+            postList = postRepository.findAllByPrivatedAndDelYnAndCreateDateBetween(pageable, "N", "N", month, now);
         } else {
-            postList = postRepository.findAllByPrivatedAndDeleted(pageable, "N", "N");
+            postList = postRepository.findAllByPrivatedAndDelYn(pageable, "N", "N");
         }
 
         return postList;
@@ -57,7 +51,7 @@ public class PostService {
      */
     @Transactional
     public Post getPost(Long postIdx) {
-        Post getPost = postRepository.findPostByPostIdxAndDeleted(postIdx,"N")
+        Post getPost = postRepository.findPostByPostIdxAndDelYn(postIdx,"N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         getPost.updateBoardCount();
@@ -81,7 +75,7 @@ public class PostService {
      */
     @Transactional
     public Post updatePost(Long postIdx, PostRequest postRequest) {
-        Post getPost = postRepository.findPostByPostIdxAndDeleted(postIdx, "N")
+        Post getPost = postRepository.findPostByPostIdxAndDelYn(postIdx, "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         getPost.update(postRequest);
@@ -97,10 +91,9 @@ public class PostService {
      */
     @Transactional
     public void deletePost(Long postIdx) {
-        Post getPost = postRepository.findPostByPostIdxAndDeleted(postIdx, "N")
+        Post getPost = postRepository.findPostByPostIdxAndDelYn(postIdx, "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         getPost.delete();
     }
-
 }
