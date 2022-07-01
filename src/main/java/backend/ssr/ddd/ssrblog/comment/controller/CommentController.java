@@ -10,16 +10,19 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -43,7 +46,11 @@ public class CommentController {
 
     @PostMapping("/post/{postIdx}/comment") @ApiOperation(value = "댓글 등록", notes = "게시물 번호가 postIdx 인 게시물에 commentRequest 를 받아 댓글을 등록한다.")
     @ApiImplicitParam(name = "postIdx", required = true, value = "예 : 1")
-    public ResponseEntity<CommentResponse> saveComment(@PathVariable Long postIdx, @RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<CommentResponse> saveComment(@PathVariable Long postIdx, @RequestBody CommentRequest commentRequest, Errors errors) {
+        if (errors.hasErrors()) {
+            return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
+
         Comment comment = commentService.saveComment(postIdx, commentRequest);
 
         return new ResponseEntity<>(comment.toResponse(), HttpStatus.CREATED);
@@ -54,7 +61,11 @@ public class CommentController {
         @ApiImplicitParam(name = "postIdx", required = true, value = "예 : 1"),
         @ApiImplicitParam(name = "commentIdx", required = true, value = "예 : 1")
     })
-    public ResponseEntity<CommentResponse> updateComment(@PathVariable Post postIdx, @PathVariable Long commentIdx, @RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<CommentResponse> updateComment(@PathVariable Post postIdx, @PathVariable Long commentIdx, @RequestBody CommentRequest commentRequest, Errors errors) {
+        if (errors.hasErrors()) {
+            errors.getFieldError().getDefaultMessage();
+        };
+
         Comment comment = commentService.updateComment(postIdx, commentIdx, commentRequest);
 
         return new ResponseEntity<>(comment.toResponse(), HttpStatus.OK);

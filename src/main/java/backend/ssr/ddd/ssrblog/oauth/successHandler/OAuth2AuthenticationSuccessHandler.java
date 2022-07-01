@@ -50,16 +50,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         log.info("requset URL : {}", request.getRequestURL());
 
-        String url = "";
-
-
+        String url = makeRedirectUrl(jwt);
 
         getRedirectStrategy().sendRedirect(request, response, url);
     }
 
     private String makeRedirectUrl(JwtResponse jwt) {
 
-        return UriComponentsBuilder.fromUriString("http://localhost:3000/callback/login?token=" + jwt.getAccessToken() + "&refreshtoken=" + jwt.getRefreshToken())
+        return UriComponentsBuilder.fromUriString("http://dewspaper.com/callback/login?token=" + jwt.getAccessToken() + "&refreshtoken=" + jwt.getRefreshToken())
                 .build().toUriString();
     }
 }

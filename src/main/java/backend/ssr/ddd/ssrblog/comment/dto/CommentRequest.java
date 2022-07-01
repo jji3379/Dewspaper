@@ -24,7 +24,7 @@ public class CommentRequest {
     private Long accountIdx;
 
     @NotBlank(message = "댓글 내용은 필수 입력 항목입니다.")
-    @Size(max = 200, message = "댓글 내용은 최대 200자까지 입력 가능합니다.")
+    @Size(max = 1000, message = "댓글 내용은 최대 1000자까지 입력 가능합니다.")
     @ApiModelProperty(value = "댓글 내용", required = true, example = "밤이 되었습니다. 서버 개발자는 고개를 들어주세요...", position = 1)
     private String comment;
 
