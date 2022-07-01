@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -19,7 +20,7 @@ import javax.validation.constraints.Size;
 @ApiModel(description = "댓글 요청 정보")
 public class CommentRequest {
 
-    @NotBlank(message = "댓글 작성자는 필수 입력 항목입니다.")
+    @NotNull(message = "댓글 작성자는 필수 입력 항목입니다.")
     @ApiModelProperty(value = "댓글 작성자", required = true, example = "8", position = 1)
     private Long accountIdx;
 

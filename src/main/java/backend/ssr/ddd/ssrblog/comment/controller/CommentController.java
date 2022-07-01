@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class CommentController {
 
     @PostMapping("/post/{postIdx}/comment") @ApiOperation(value = "댓글 등록", notes = "게시물 번호가 postIdx 인 게시물에 commentRequest 를 받아 댓글을 등록한다.")
     @ApiImplicitParam(name = "postIdx", required = true, value = "예 : 1")
-    public ResponseEntity<CommentResponse> saveComment(@PathVariable Long postIdx, @RequestBody CommentRequest commentRequest, Errors errors) {
+    public ResponseEntity<CommentResponse> saveComment(@PathVariable Long postIdx, @RequestBody @Valid CommentRequest commentRequest, Errors errors) {
         if (errors.hasErrors()) {
             return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -61,10 +62,10 @@ public class CommentController {
         @ApiImplicitParam(name = "postIdx", required = true, value = "예 : 1"),
         @ApiImplicitParam(name = "commentIdx", required = true, value = "예 : 1")
     })
-    public ResponseEntity<CommentResponse> updateComment(@PathVariable Post postIdx, @PathVariable Long commentIdx, @RequestBody CommentRequest commentRequest, Errors errors) {
+    public ResponseEntity<CommentResponse> updateComment(@PathVariable Post postIdx, @PathVariable Long commentIdx, @RequestBody @Valid CommentRequest commentRequest, Errors errors) {
         if (errors.hasErrors()) {
-            errors.getFieldError().getDefaultMessage();
-        };
+            return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
 
         Comment comment = commentService.updateComment(postIdx, commentIdx, commentRequest);
 
