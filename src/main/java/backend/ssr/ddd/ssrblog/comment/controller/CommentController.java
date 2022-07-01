@@ -34,14 +34,14 @@ public class CommentController {
     @GetMapping("/post/{postIdx}/comments") @ApiOperation(value = "게시물에 해당하는 댓글 조회", notes = "postIdx 에 해당하는 댓글 전체를 페이징 처리하여 조회한다.")
     @ApiImplicitParam(name = "postIdx", required = true, value = "예 : 1")
     public ResponseEntity<Page<CommentResponse>> getCommentsList(Pageable pageable, @PathVariable Post postIdx) {
-        List<Comment> commentList = commentService.getCommentList(pageable, postIdx);
+        Page<Comment> commentList = commentService.getCommentList(pageable, postIdx);
 
         List<CommentResponse> responseList = new ArrayList<>();
         for (Comment comment : commentList) {
             responseList.add(comment.toResponse());
         }
 
-        return new ResponseEntity(new PageImpl<>(responseList, pageable, responseList.size()), HttpStatus.OK);
+        return new ResponseEntity(new PageImpl<>(responseList, pageable, commentList.getTotalElements()), HttpStatus.OK);
     }
 
     @PostMapping("/post/{postIdx}/comment") @ApiOperation(value = "댓글 등록", notes = "게시물 번호가 postIdx 인 게시물에 commentRequest 를 받아 댓글을 등록한다.")

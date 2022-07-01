@@ -9,6 +9,7 @@ import backend.ssr.ddd.ssrblog.common.Exception.ErrorCode;
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
 import backend.ssr.ddd.ssrblog.post.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class CommentService {
 
     private final AccountRepository accountRepository;
 
-    public List<Comment> getCommentList(Pageable pageable, Post postIdx) {
+    public Page<Comment> getCommentList(Pageable pageable, Post postIdx) {
 
         return commentRepository.findAllByPostIdx(pageable, postIdx);
     }
