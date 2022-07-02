@@ -29,10 +29,10 @@ public class CommentRequest {
     @ApiModelProperty(value = "댓글 내용", required = true, example = "밤이 되었습니다. 서버 개발자는 고개를 들어주세요...", position = 1)
     private String comment;
 
-    public Comment toEntity(Long postIdx) {
+    public Comment toEntity(Long postIdx, Account account) {
         Comment build = Comment.builder()
                 .postIdx(Post.builder().postIdx(postIdx).build())
-                .accountIdx(Account.builder().accountIdx(accountIdx).build())
+                .accountIdx(account)
                 .comment(comment)
                 .build();
 

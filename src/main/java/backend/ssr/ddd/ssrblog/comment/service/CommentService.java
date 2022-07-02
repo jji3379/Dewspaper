@@ -1,5 +1,6 @@
 package backend.ssr.ddd.ssrblog.comment.service;
 
+import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
 import backend.ssr.ddd.ssrblog.comment.domain.entity.Comment;
 import backend.ssr.ddd.ssrblog.comment.domain.repository.CommentRepository;
@@ -34,10 +35,10 @@ public class CommentService {
         postRepository.findById(postIdx)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
-        accountRepository.findById(commentRequest.getAccountIdx())
+        Account account = accountRepository.findById(commentRequest.getAccountIdx())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
 
-        Comment comment = commentRequest.toEntity(postIdx);
+        Comment comment = commentRequest.toEntity(postIdx, account);
 
         return commentRepository.save(comment);
     }
