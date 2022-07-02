@@ -3,13 +3,15 @@ package backend.ssr.ddd.ssrblog.common.Search.service;
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.account.domain.entity.QAccount;
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
-import backend.ssr.ddd.ssrblog.common.Search.dto.SearchResponse;
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
 import backend.ssr.ddd.ssrblog.post.domain.entity.QPost;
-import backend.ssr.ddd.ssrblog.post.domain.repository.PostRepository;
 import backend.ssr.ddd.ssrblog.post.dto.PostResponse;
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,38 +25,43 @@ public class SearchService {
     /**
      * 회원, 게시물 동시 검색
      */
-    public SearchResponse searchAccountAndPost(String search) {
+    public Page<AccountResponse> searchAccount(Pageable pageable, String search) {
         QAccount qAccount = QAccount.account;
-        QPost qPost = QPost.post;
 
-        List<Account> accounts = jpaQueryFactory.select(qAccount)
+        QueryResults<Account> accounts = jpaQueryFactory.select(qAccount)
                 .from(qAccount)
                 .where(qAccount.email.contains(search)
                         .or(qAccount.name.contains(search)))
-                .fetch();
-
-        List<Post> posts = jpaQueryFactory.select(qPost)
-                .from(qPost)
-                .where(qPost.title.contains(search)
-                        .or(qPost.contents.contains(search)))
-                .fetch();
-
-        SearchResponse searchResponse = new SearchResponse();
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
 
         List<AccountResponse> accountResponseList = new ArrayList<>();
-        List<PostResponse> postResponseList = new ArrayList<>();
 
-        for (Account account : accounts) {
+        for (Account account : accounts.getResults()) {
             accountResponseList.add(account.toResponse());
         }
 
-        for (Post post : posts) {
+        return new PageImpl<>(accountResponseList, pageable, accounts.getTotal());
+    }
+
+    public Page<PostResponse> searchPost(Pageable pageable, String search) {
+        QPost qPost = QPost.post;
+
+        QueryResults<Post> posts = jpaQueryFactory.select(qPost)
+                .from(qPost)
+                .where(qPost.title.contains(search)
+                        .or(qPost.contents.contains(search)))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<PostResponse> postResponseList = new ArrayList<>();
+
+        for (Post post : posts.getResults()) {
             postResponseList.add(post.toResponse());
         }
 
-        searchResponse.getSearchAccountsAndPosts(accountResponseList, postResponseList);
-
-
-        return searchResponse;
+        return new PageImpl<>(postResponseList, pageable, posts.getTotal());
     }
 }
