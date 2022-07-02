@@ -20,7 +20,7 @@ public class CommentResponse {
     private Long postIdx;
 
     @ApiModelProperty(value = "회원 번호", example = "8", position = 3)
-    private AccountResponse accountIdx;
+    private AccountResponse account;
 
     @ApiModelProperty(value = "댓글 내용", example = "살려줘", position = 4)
     private String comment;
@@ -35,10 +35,10 @@ public class CommentResponse {
     private String delYn;
 
     @Builder
-    public CommentResponse(Long commentIdx, Long postIdx, AccountResponse accountIdx, String comment, LocalDateTime createDate, LocalDateTime updateDate) {
+    public CommentResponse(Long commentIdx, Long postIdx, AccountResponse account, String comment, LocalDateTime createDate, LocalDateTime updateDate) {
         this.commentIdx = commentIdx;
         this.postIdx = postIdx;
-        this.accountIdx = accountIdx;
+        this.account = account;
         this.comment = comment;
         this.createDate = createDate;
         this.updateDate = updateDate;

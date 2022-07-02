@@ -46,7 +46,7 @@ public class Comment extends BaseTimeEntity {
         CommentResponse build = CommentResponse.builder()
                 .postIdx(postIdx.getPostIdx())
                 .commentIdx(commentIdx)
-                .accountIdx(accountIdx.toResponse())
+                .account(accountIdx.toResponse())
                 .comment(comment)
                 .createDate(getCreateDate())
                 .updateDate(getUpdateDate())
