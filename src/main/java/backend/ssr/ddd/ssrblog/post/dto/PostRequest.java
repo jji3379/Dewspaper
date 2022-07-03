@@ -34,8 +34,8 @@ public class PostRequest {
     @ApiModelProperty(value = "썸네일 내용", example = "SSR은 서버에서 ~~~", position = 4)
     private String thumbnailContents;
 
-    @ApiModelProperty(value = "함께한 동료", example = "", position = 4)
-    private List<WriterRequest> cowriter;
+//    @ApiModelProperty(value = "함께한 동료", example = "", position = 4)
+//    private List<WriterRequest> cowriter;
 
 
     public Post toEntity() {
