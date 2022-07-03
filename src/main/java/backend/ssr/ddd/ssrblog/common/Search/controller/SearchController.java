@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,8 @@ public class SearchController {
     @GetMapping("/search/accounts/{search}") @ApiOperation(value = "게시물, 회원 검색 조회", notes = "회원의 이름, 이메일에 검색어가 포함된 결과를 조회한다.")
     @ApiImplicitParam(name = "search", value = "예 : j")
     public ResponseEntity<Page<AccountResponse>> getSearchAccounts(Pageable pageable, @PathVariable String search) {
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().descending());
+
         Page<AccountResponse> accountResponses = searchService.searchAccount(pageable, search);
 
         return new ResponseEntity<>(accountResponses, HttpStatus.OK);
@@ -35,7 +38,9 @@ public class SearchController {
 
     @GetMapping("/search/posts/{search}") @ApiOperation(value = "게시물, 회원 검색 조회", notes = "게시물 제목, 내용에 검색어가 포함된 결과를 조회한다.")
     @ApiImplicitParam(name = "search", value = "예 : c")
-    public ResponseEntity<Page<PostResponse>> getSearchosts(Pageable pageable, @PathVariable String search) {
+    public ResponseEntity<Page<PostResponse>> getSearchPosts(Pageable pageable, @PathVariable String search) {
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().descending());
+
         Page<PostResponse> postResponses = searchService.searchPost(pageable, search);
 
         return new ResponseEntity<>(postResponses, HttpStatus.OK);

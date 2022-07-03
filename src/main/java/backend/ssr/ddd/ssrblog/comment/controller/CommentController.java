@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,8 @@ public class CommentController {
     @GetMapping("/post/{postIdx}/comments") @ApiOperation(value = "게시물에 해당하는 댓글 조회", notes = "postIdx 에 해당하는 댓글 전체를 페이징 처리하여 조회한다.")
     @ApiImplicitParam(name = "postIdx", required = true, value = "예 : 1")
     public ResponseEntity<Page<CommentResponse>> getCommentsList(Pageable pageable, @PathVariable Post postIdx) {
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().descending());
+
         Page<Comment> commentList = commentService.getCommentList(pageable, postIdx);
 
         List<CommentResponse> responseList = new ArrayList<>();
