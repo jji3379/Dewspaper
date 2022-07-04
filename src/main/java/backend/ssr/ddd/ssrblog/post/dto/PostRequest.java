@@ -1,9 +1,7 @@
 package backend.ssr.ddd.ssrblog.post.dto;
 
-import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
-import backend.ssr.ddd.ssrblog.writer.domain.entity.Writer;
-import backend.ssr.ddd.ssrblog.writer.dto.WriterRequest;
+import backend.ssr.ddd.ssrblog.writer.dto.WriterDto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -12,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -34,9 +31,8 @@ public class PostRequest {
     @ApiModelProperty(value = "썸네일 내용", example = "SSR은 서버에서 ~~~", position = 4)
     private String thumbnailContents;
 
-//    @ApiModelProperty(value = "함께한 동료", example = "", position = 4)
-//    private List<WriterRequest> cowriter;
-
+    @ApiModelProperty(value = "함께한 동료", example = "[8, 11, 14]", position = 5)
+    private WriterDto cowriter;
 
     public Post toEntity() {
         Post build = Post.builder()

@@ -5,6 +5,8 @@ import backend.ssr.ddd.ssrblog.common.Exception.ErrorCode;
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
 import backend.ssr.ddd.ssrblog.post.domain.repository.PostRepository;
 import backend.ssr.ddd.ssrblog.post.dto.PostRequest;
+import backend.ssr.ddd.ssrblog.writer.domain.entity.Writer;
+import backend.ssr.ddd.ssrblog.writer.domain.repository.WriterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,8 @@ import java.time.LocalDateTime;
 public class PostService {
 
     private final PostRepository postRepository;
+
+    private final WriterRepository writerRepository;
 
     /**
      * 페이징 처리된 게시물 리스트 조회
@@ -64,8 +68,15 @@ public class PostService {
      */
     @Transactional
     public Post savePost(PostRequest postRequest) {
+        Post save = postRepository.save(postRequest.toEntity());
 
-        return postRepository.save(postRequest.toEntity());
+        for (Long account : postRequest.getCowriter().getAccountIdx()) {
+            Writer writer = new Writer();
+            writer.add(save.getPostIdx(), account, postRequest.getCowriter().getRealWriter());
+            writerRepository.save(writer);
+        }
+
+        return save;
     }
 
     /**

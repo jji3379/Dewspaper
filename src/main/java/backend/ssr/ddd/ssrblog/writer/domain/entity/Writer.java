@@ -3,7 +3,6 @@ package backend.ssr.ddd.ssrblog.writer.domain.entity;
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.common.TimeEntity.BaseTimeEntity;
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
-import backend.ssr.ddd.ssrblog.writer.dto.WriterRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,14 +17,18 @@ public class Writer extends BaseTimeEntity {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_idx")
     private Post postIdx;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_idx")
     private Account accountIdx;
 
+    @Column(name = "real_writer")
     private Long realWriter;
 
+    @Column(name = "del_yn")
     private String delYn = "N";
 
     @Builder
@@ -36,9 +39,10 @@ public class Writer extends BaseTimeEntity {
         this.delYn = delYn;
     }
 
-    public Writer add(Post postIdx, WriterRequest account) {
-        this.postIdx = postIdx;
-        this.accountIdx = Account.builder().accountIdx(account.getAccountIdx()).build();
+    public Writer add(Long postIdx, Long accountIdx, Long realWriter) {
+        this.postIdx = Post.builder().postIdx(postIdx).build();
+        this.accountIdx = Account.builder().accountIdx(accountIdx).build();
+        this.realWriter = realWriter;
 
         return this;
     }
