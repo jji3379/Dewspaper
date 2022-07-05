@@ -4,6 +4,7 @@ import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
 import backend.ssr.ddd.ssrblog.post.dto.PostRequest;
 import backend.ssr.ddd.ssrblog.post.dto.PostResponse;
 import backend.ssr.ddd.ssrblog.post.service.PostService;
+import backend.ssr.ddd.ssrblog.writer.service.WriterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;

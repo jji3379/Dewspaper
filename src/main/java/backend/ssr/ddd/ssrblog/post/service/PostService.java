@@ -106,5 +106,7 @@ public class PostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
         getPost.delete();
+
+        postRepository.save(getPost);
     }
 }

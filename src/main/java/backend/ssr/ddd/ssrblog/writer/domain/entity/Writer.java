@@ -31,6 +31,10 @@ public class Writer extends BaseTimeEntity {
     @Column(name = "del_yn")
     private String delYn = "N";
 
+    public void delete(){
+        this.delYn="Y";
+    }
+
     @Builder
     public Writer(Post postIdx, Account accountIdx, Long realWriter, String delYn) {
         this.postIdx = postIdx;

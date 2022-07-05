@@ -28,6 +28,7 @@ public enum ErrorCode {
     NOT_FOUND_POST(NOT_FOUND, "요청하신 게시물이 존재하지 않습니다"),
     NOT_FOUND_COMMNET(NOT_FOUND, "요청하신 댓글이 존재하지 않습니다"),
     NOT_FOUND_FRIEND_REQUEST(NOT_FOUND, "요청하신 친구요청이 존재하지 않습니다"),
+    NOT_FOUND_WRITER(NOT_FOUND, "요청하신 작성자가 존재하지 않습니다"),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다");

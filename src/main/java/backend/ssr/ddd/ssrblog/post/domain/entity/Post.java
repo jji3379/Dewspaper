@@ -35,7 +35,7 @@ public class Post extends BaseTimeEntity {
 
     private String privated;
 
-    private String delYn;
+    private String delYn = "N";
 
     public void update(PostRequest postRequest) {
         this.thumbnailImg = postRequest.getThumbnailImg();

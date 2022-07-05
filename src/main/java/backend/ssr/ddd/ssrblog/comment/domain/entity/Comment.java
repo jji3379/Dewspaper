@@ -30,6 +30,8 @@ public class Comment extends BaseTimeEntity {
 
     private String comment;
 
+    private String delYn = "N";
+
     @Builder
     public Comment(Long commentIdx, Post postIdx, Account accountIdx, String comment) {
         this.commentIdx = commentIdx;
@@ -39,7 +41,13 @@ public class Comment extends BaseTimeEntity {
     }
 
     public void update(CommentRequest commentRequest) {
+
         this.comment = commentRequest.getComment();
+    }
+
+    public void delete(){
+
+        this.delYn="Y";
     }
 
     public CommentResponse toResponse() {

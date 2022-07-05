@@ -74,7 +74,6 @@ public class Account extends BaseTimeEntity implements UserDetails {
                 .name(name)
                 .profileImg(profileImg)
                 .build();
-
         return build;
     }
 
@@ -83,6 +82,10 @@ public class Account extends BaseTimeEntity implements UserDetails {
         this.name = name;
 
         return this;
+    }
+
+    public void delete(){
+        this.withdrawal="Y";
     }
 
     public String getRoleKey() {

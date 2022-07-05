@@ -16,6 +16,8 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
+
+
     private final JwtTokenProvider jwtTokenProvider;
     public Account getAccountOne(Long idx) {
 
@@ -37,4 +39,11 @@ public class AccountService {
         return accountRepository.findByEmailAndPlatform(email, platform).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
     }
 
+    public void delete(Long accountIdx){
+        Account account = accountRepository.findById(accountIdx).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
+
+        account.delete();
+
+        accountRepository.save(account);
+    }
 }

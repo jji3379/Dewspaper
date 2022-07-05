@@ -28,7 +28,7 @@ public class CommentService {
 
     public Page<Comment> getCommentList(Pageable pageable, Post postIdx) {
 
-        return commentRepository.findAllByPostIdx(pageable, postIdx);
+        return commentRepository.findAllByPostIdxAndDelYn(pageable, postIdx, "N");
     }
 
     public Comment saveComment(Long postIdx, CommentRequest commentRequest) {
@@ -44,7 +44,7 @@ public class CommentService {
     }
 
     public Comment updateComment(Post postIdx, Long commentIdx, CommentRequest commentRequest) {
-        Comment comment = commentRepository.findByPostIdxAndCommentIdx(postIdx, commentIdx)
+        Comment comment = commentRepository.findByPostIdxAndCommentIdxAndDelYn(postIdx, commentIdx, "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMNET));
 
         if (comment.getAccountIdx().getAccountIdx() != commentRequest.getAccountIdx()) {
@@ -57,9 +57,11 @@ public class CommentService {
     }
 
     public void deleteComment(Post postIdx, Long commentIdx) {
-        Comment comment = commentRepository.findByPostIdxAndCommentIdx(postIdx, commentIdx)
+        Comment comment = commentRepository.findByPostIdxAndCommentIdxAndDelYn(postIdx, commentIdx, "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMNET));
 
-        commentRepository.delete(comment);
+        comment.delete();
+
+        commentRepository.save(comment);
     }
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    Page<Comment> findAllByPostIdx(Pageable pageable, Post postIdx);
+    Page<Comment> findAllByPostIdxAndDelYn(Pageable pageable, Post postIdx, String delYn);
 
-    Optional<Comment> findByPostIdxAndCommentIdx(Post postIdx, Long commentIdx);
+    Optional<Comment> findByPostIdxAndCommentIdxAndDelYn(Post postIdx, Long commentIdx, String delYn);
 }
