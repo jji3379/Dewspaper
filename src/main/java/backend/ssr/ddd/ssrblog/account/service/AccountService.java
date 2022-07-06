@@ -36,7 +36,7 @@ public class AccountService {
 
     public Account getAccountInfo(String email, String platform) {
 
-        return accountRepository.findByEmailAndPlatform(email, platform).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
+        return accountRepository.findByEmailAndPlatformAndWithdrawal(email, platform, "N").orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
     }
 
     public void delete(Long accountIdx){
