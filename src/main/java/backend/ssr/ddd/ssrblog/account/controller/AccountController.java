@@ -1,7 +1,6 @@
 package backend.ssr.ddd.ssrblog.account.controller;
 
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
-import backend.ssr.ddd.ssrblog.account.dto.AccountMeResponse;
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import backend.ssr.ddd.ssrblog.account.service.AccountService;
 import io.swagger.annotations.Api;
@@ -44,9 +43,9 @@ public class AccountController {
     }
 
     @GetMapping("/me")
-    public AccountMeResponse getAccountInfo(Authentication authentication) {
+    public AccountResponse getAccountInfo(Authentication authentication) {
         Account account = (Account) authentication.getPrincipal();
 
-        return accountService.getAccountInfo(account.getEmail(), account.getPlatform()).toResponseMe();
+        return accountService.getAccountInfo(account.getEmail(), account.getPlatform()).toResponse();
     }
 }

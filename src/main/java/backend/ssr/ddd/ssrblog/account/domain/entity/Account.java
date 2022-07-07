@@ -1,6 +1,5 @@
 package backend.ssr.ddd.ssrblog.account.domain.entity;
 
-import backend.ssr.ddd.ssrblog.account.dto.AccountMeResponse;
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import backend.ssr.ddd.ssrblog.account.dto.Role;
 import backend.ssr.ddd.ssrblog.common.TimeEntity.BaseTimeEntity;
@@ -67,14 +66,6 @@ public class Account extends BaseTimeEntity implements UserDetails {
         this.emailAg = emailAg;
         this.alarmAg = alarmAg;
         this.withdrawal = withdrawal;
-    }
-
-    public AccountMeResponse toResponseMe() {
-        AccountMeResponse build = AccountMeResponse.builder()
-                .name(name)
-                .profileImg(profileImg)
-                .build();
-        return build;
     }
 
     public Account update(String platform, String name) {
