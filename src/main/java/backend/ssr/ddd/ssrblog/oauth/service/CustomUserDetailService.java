@@ -18,7 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
         String email = userInfo[0];
         String platform = userInfo[1];
 
-        return accountRepository.findByEmailAndPlatform(email, platform)
+        return accountRepository.findByEmailAndPlatformAndWithdrawal(email, platform, "N")
                 .orElseThrow(() -> new UsernameNotFoundException("회원이 존재하지 않습니다."));
     }
 }
