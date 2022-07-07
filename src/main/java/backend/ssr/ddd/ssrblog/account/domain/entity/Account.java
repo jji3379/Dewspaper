@@ -50,7 +50,7 @@ public class Account extends BaseTimeEntity implements UserDetails {
                 .alarmAg(alarmAg)
                 .createDate(getCreateDate())
                 .updateDate(getUpdateDate())
-                .withdrawal(withdrawal)
+                .withdrawal("N")
                 .build();
         return build;
     }
