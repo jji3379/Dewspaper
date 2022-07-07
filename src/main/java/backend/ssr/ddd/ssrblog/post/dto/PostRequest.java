@@ -1,7 +1,7 @@
 package backend.ssr.ddd.ssrblog.post.dto;
 
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
-import backend.ssr.ddd.ssrblog.writer.dto.WriterDto;
+import backend.ssr.ddd.ssrblog.writer.dto.WriterRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -32,7 +32,7 @@ public class PostRequest {
     private String thumbnailContents;
 
     @ApiModelProperty(value = "함께한 동료", example = "[8, 11, 14]", position = 5)
-    private WriterDto cowriter;
+    private WriterRequest coWriter;
 
     public Post toEntity() {
         Post build = Post.builder()

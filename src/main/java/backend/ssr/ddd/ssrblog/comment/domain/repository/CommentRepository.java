@@ -14,6 +14,6 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Page<Comment> findAllByPostIdxAndDelYn(Pageable pageable, Post postIdx, String delYn);
-
+    List<Comment> findByPostIdxAndDelYn(Post postIdx, String delYn);
     Optional<Comment> findByPostIdxAndCommentIdxAndDelYn(Post postIdx, Long commentIdx, String delYn);
 }

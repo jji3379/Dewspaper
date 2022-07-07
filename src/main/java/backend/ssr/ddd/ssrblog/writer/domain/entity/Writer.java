@@ -3,11 +3,14 @@ package backend.ssr.ddd.ssrblog.writer.domain.entity;
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.common.TimeEntity.BaseTimeEntity;
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
+import backend.ssr.ddd.ssrblog.writer.dto.WriterRequest;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -43,7 +46,26 @@ public class Writer extends BaseTimeEntity {
         this.delYn = delYn;
     }
 
-    public Writer add(Long postIdx, Long accountIdx, Long realWriter) {
+    public WriterRequest toResponse() {
+        List<Long> cowriter = new ArrayList<>();
+        cowriter.add(accountIdx.getAccountIdx());
+        WriterRequest build = WriterRequest.builder()
+                .accountIdx(cowriter)
+                .realWriter(realWriter)
+                .build();
+
+        return build;
+    }
+
+    public Writer addCoWriter(Long postIdx, Long accountIdx, Long realWriter) {
+        this.postIdx = Post.builder().postIdx(postIdx).build();
+        this.accountIdx = Account.builder().accountIdx(accountIdx).build();
+        this.realWriter = realWriter;
+
+        return this;
+    }
+
+    public Writer addRealWriter(Long postIdx, Long accountIdx, Long realWriter) {
         this.postIdx = Post.builder().postIdx(postIdx).build();
         this.accountIdx = Account.builder().accountIdx(accountIdx).build();
         this.realWriter = realWriter;
