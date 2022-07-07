@@ -6,6 +6,7 @@ import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
 import backend.ssr.ddd.ssrblog.post.domain.entity.QPost;
 import backend.ssr.ddd.ssrblog.post.dto.PostResponse;
+import backend.ssr.ddd.ssrblog.post.service.PostService;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,8 @@ import java.util.List;
 public class SearchService {
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    private final PostService postService;
     /**
      * 회원, 게시물 동시 검색
      */
@@ -57,9 +60,8 @@ public class SearchService {
                 .fetchResults();
 
         List<PostResponse> postResponseList = new ArrayList<>();
-
         for (Post post : posts.getResults()) {
-            postResponseList.add(post.toResponse());
+            postResponseList.add(post.toResponse(postService.getCoWriterInfo(post)));
         }
 
         return new PageImpl<>(postResponseList, pageable, posts.getTotal());

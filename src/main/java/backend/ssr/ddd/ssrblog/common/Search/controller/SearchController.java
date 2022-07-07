@@ -37,7 +37,7 @@ public class SearchController {
     }
 
     @GetMapping("/search/posts/{search}") @ApiOperation(value = "게시물, 회원 검색 조회", notes = "게시물 제목, 내용에 검색어가 포함된 결과를 조회한다.")
-    @ApiImplicitParam(name = "search", value = "예 : c")
+    @ApiImplicitParam(name = "search", value = "예 : s")
     public ResponseEntity<Page<PostResponse>> getSearchPosts(Pageable pageable, @PathVariable String search) {
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().descending());
 
