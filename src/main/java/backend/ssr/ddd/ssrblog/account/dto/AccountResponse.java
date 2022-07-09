@@ -16,17 +16,15 @@ public class AccountResponse {
     private String role;
     private String profileImg;
     private String withdrawal;
-
+    private String introduction;
     private String emailAg;
-
     private String alarmAg;
-
     private LocalDateTime createDate;
 
     private LocalDateTime updateDate;
 
     @Builder
-    public AccountResponse(Long accountIdx, String email, String platform, String name, String role, String profileImg, String withdrawal, String emailAg, String alarmAg, LocalDateTime createDate, LocalDateTime updateDate) {
+    public AccountResponse(Long accountIdx, String email, String platform, String name, String role, String profileImg, String withdrawal, String introduction, String emailAg, String alarmAg, LocalDateTime createDate, LocalDateTime updateDate) {
         this.accountIdx = accountIdx;
         this.email = email;
         this.platform = platform;
@@ -34,6 +32,7 @@ public class AccountResponse {
         this.role = role;
         this.profileImg = profileImg;
         this.withdrawal = withdrawal;
+        this.introduction = introduction;
         this.emailAg = emailAg;
         this.alarmAg = alarmAg;
         this.createDate = createDate;

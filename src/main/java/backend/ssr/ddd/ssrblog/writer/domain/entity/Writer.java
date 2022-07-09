@@ -28,8 +28,9 @@ public class Writer extends BaseTimeEntity {
     @JoinColumn(name = "account_idx")
     private Account accountIdx;
 
-    @Column(name = "real_writer")
-    private Long realWriter;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "real_writer")
+    private Account realWriter;
 
     @Column(name = "del_yn")
     private String delYn = "N";
@@ -39,28 +40,17 @@ public class Writer extends BaseTimeEntity {
     }
 
     @Builder
-    public Writer(Post postIdx, Account accountIdx, Long realWriter, String delYn) {
+    public Writer(Post postIdx, Account accountIdx, Account realWriter, String delYn) {
         this.postIdx = postIdx;
         this.accountIdx = accountIdx;
         this.realWriter = realWriter;
         this.delYn = delYn;
     }
 
-    public WriterRequest toResponse() {
-        List<Long> cowriter = new ArrayList<>();
-        cowriter.add(accountIdx.getAccountIdx());
-        WriterRequest build = WriterRequest.builder()
-                .accountIdx(cowriter)
-                .realWriter(realWriter)
-                .build();
-
-        return build;
-    }
-
     public Writer addCoWriter(Long postIdx, Long accountIdx, Long realWriter) {
         this.postIdx = Post.builder().postIdx(postIdx).build();
         this.accountIdx = Account.builder().accountIdx(accountIdx).build();
-        this.realWriter = realWriter;
+        this.realWriter = Account.builder().accountIdx(realWriter).build();
 
         return this;
     }
@@ -68,7 +58,7 @@ public class Writer extends BaseTimeEntity {
     public Writer addRealWriter(Long postIdx, Long accountIdx, Long realWriter) {
         this.postIdx = Post.builder().postIdx(postIdx).build();
         this.accountIdx = Account.builder().accountIdx(accountIdx).build();
-        this.realWriter = realWriter;
+        this.realWriter = Account.builder().accountIdx(realWriter).build();
 
         return this;
     }

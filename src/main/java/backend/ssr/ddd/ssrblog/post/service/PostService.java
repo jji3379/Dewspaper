@@ -8,12 +8,17 @@ import backend.ssr.ddd.ssrblog.comment.domain.repository.CommentRepository;
 import backend.ssr.ddd.ssrblog.common.Exception.CustomException;
 import backend.ssr.ddd.ssrblog.common.Exception.ErrorCode;
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
+import backend.ssr.ddd.ssrblog.post.domain.entity.QPost;
 import backend.ssr.ddd.ssrblog.post.domain.repository.PostRepository;
 import backend.ssr.ddd.ssrblog.post.dto.PostRequest;
 import backend.ssr.ddd.ssrblog.post.dto.PostResponse;
+import backend.ssr.ddd.ssrblog.writer.domain.entity.QWriter;
 import backend.ssr.ddd.ssrblog.writer.domain.entity.Writer;
 import backend.ssr.ddd.ssrblog.writer.domain.repository.WriterRepository;
 import backend.ssr.ddd.ssrblog.writer.dto.WriterResponse;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -38,6 +43,8 @@ public class PostService {
     private final AccountRepository accountRepository;
 
     private final CommentRepository commentRepository;
+
+    private final JPAQueryFactory jpaQueryFactory;
 
     /**
      * 페이징 처리된 게시물 리스트 조회
@@ -194,12 +201,80 @@ public class PostService {
             coWriterList.add(coWriter.toResponse());
         }
 
-        Account realWriter = accountRepository.findById(postWriterInfo.get(0).getRealWriter())
+        Account realWriter = accountRepository.findById(postWriterInfo.get(0).getRealWriter().getAccountIdx())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
 
         WriterResponse writerResponse = new WriterResponse();
         writerResponse.addWriterResponse(coWriterList, realWriter);
 
         return writerResponse;
+    }
+
+    /**
+     * 회원이 작성한 글 목록
+     */
+    public Page<PostResponse> getMyPosts(Pageable pageable, Account accountIdx, String display) {
+        QWriter qWriter = QWriter.writer;
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (display.equals("public")) {
+            builder.and(qWriter.postIdx.privated.eq("N"));
+        } else if (display.equals("private")) {
+            builder.and(qWriter.postIdx.privated.eq("Y"));
+        }
+
+        QueryResults<Post> pagePostList = jpaQueryFactory.select(qWriter.postIdx).distinct()
+                .from(qWriter)
+                .where(qWriter.realWriter.eq(accountIdx)
+                        .and(qWriter.delYn.eq("N"))
+                        .and(builder) // public or private
+                ).orderBy(qWriter.postIdx.createDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+        List<PostResponse> postResponseList = new ArrayList<>();
+
+        for (Post post : pagePostList.getResults()) {
+            postResponseList.add(post.toResponse(getCoWriterInfo(post)));
+        }
+
+        return new PageImpl<>(postResponseList, pageable, pagePostList.getTotal());
+    }
+
+    public Page<PostResponse> getMyPostsOrTagList(Pageable pageable, Account accountIdx, String tab) {
+        QWriter qWriter = QWriter.writer;
+
+        Page<Writer> myPostsList = writerRepository.findByAccountIdxAndRealWriterAndDelYnOrderByCreateDateDesc(pageable, accountIdx ,accountIdx, "N");
+
+        QueryResults<Post> pageTagList = jpaQueryFactory.select(qWriter.postIdx).distinct()
+                .from(qWriter)
+                .where(qWriter.accountIdx.accountIdx.eq(accountIdx.getAccountIdx())
+                        .and(qWriter.delYn.eq("N"))
+                        .and(qWriter.realWriter.ne(accountIdx))
+                ).orderBy(qWriter.postIdx.createDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<PostResponse> postResponseList = new ArrayList<>();
+        Page<PostResponse> pagePostResponseList = null;
+
+        if (tab.equals("tag")) { // 태그된 경우
+            for (Post post : pageTagList.getResults()) {
+                postResponseList.add(post.toResponse(getCoWriterInfo(post)));
+            }
+
+            pagePostResponseList = new PageImpl<>(postResponseList, pageable, pageTagList.getTotal());
+        } else if (tab.equals("post")){ // 내가 작성한 글
+            for (Writer writer : myPostsList) {
+                Post postIdx = writer.getPostIdx();
+                postResponseList.add(postIdx.toResponse(getCoWriterInfo(postIdx)));
+            }
+
+            pagePostResponseList = new PageImpl<>(postResponseList, pageable, myPostsList.getTotalElements());
+        }
+
+        return pagePostResponseList;
     }
 }

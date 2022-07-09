@@ -25,5 +25,13 @@ public class WriterService {
         writerRepository.save(writer);
     }
 
+
+    /**
+     * 회원이 작성한 글의 개수
+     */
+    public long getAccountPostCount(Account accountIdx) {
+
+        return writerRepository.countByAccountIdx(accountIdx);
+    }
 }
 

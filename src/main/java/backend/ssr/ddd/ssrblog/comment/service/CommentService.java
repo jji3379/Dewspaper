@@ -64,4 +64,9 @@ public class CommentService {
 
         commentRepository.save(comment);
     }
+
+    public long getAccountCommentCount(Account accountIdx) {
+
+        return commentRepository.countByAccountIdx(accountIdx);
+    }
 }

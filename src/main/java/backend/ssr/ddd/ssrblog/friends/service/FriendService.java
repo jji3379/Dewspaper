@@ -144,4 +144,9 @@ public class FriendService {
         }
 
     }
+
+    public long getAccountFriendsCount(Account accountIdx) {
+
+        return friendsRepository.countByRequesterIdxOrAccepterIdx(accountIdx, accountIdx);
+    }
 }
