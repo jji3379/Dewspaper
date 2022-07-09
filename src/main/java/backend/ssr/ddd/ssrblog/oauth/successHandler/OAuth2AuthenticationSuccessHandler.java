@@ -48,8 +48,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         log.info("email : {}, jwt : {}",accountRequest.getEmail(), jwt.getAccessToken());
         log.info("email : {}, refresh-token : {}",accountRequest.getEmail(), jwt.getRefreshToken());
 
-        log.info("requset URL : {}", request.getRequestURL());
-
         String url = makeRedirectUrl(jwt);
 
         getRedirectStrategy().sendRedirect(request, response, url);

@@ -2,7 +2,6 @@ package backend.ssr.ddd.ssrblog.oauth.service;
 
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
-import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +12,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,6 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
      * 하지만 JWT 방식에서는 저장하지 않는다. (JWT 방식에서는 인증&인가 수행시 HttpSession을 사용하지 않을 것이다.)
      */
     private final AccountRepository accountRepository;
-    private final JwtTokenProvider jwtTokenProvider;
 
     // 구글로 부터 받은 userRequest 데이터에 대한 후처리되는 함수
     // loadUser(OAuth2UserRequest oAuth2UserRequest) 메서드는 사용자 정보를 요청할 수 있는 access token 을 얻고나서 실행된다.
@@ -67,6 +66,32 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
         Account account = accountRepository.findByEmailAndPlatformAndWithdrawal(attributes.getEmail(), attributes.getPlatform(), "N")
                 .map(entity -> entity.update(attributes.getPlatform(), attributes.getName()))
                 .orElse(attributes.toEntity());
+
+            try {
+                if (account.getProfileId() == null) {
+                    //pk 값을 얻어오기 위해 먼저 save
+                    accountRepository.save(account);
+
+                    // SHA-256 MessageDigest의 생성
+                    MessageDigest mdSHA256 = MessageDigest.getInstance("SHA-256");;
+                    // 문자열 바이트로 메시지 다이제스트를 갱신
+                    mdSHA256.update(attributes.getEmail().getBytes("UTF-8"));
+                    // 해시 계산 반환값은 바이트 배열
+                    byte[] sha256Hash = mdSHA256.digest();
+
+                    // 바이트배열을 16진수 문자열로 변환하여 표시
+                    StringBuilder hexSHA256hash = new StringBuilder();
+                    for(byte b : sha256Hash) {
+                        String hexString = String.format("%02x", b);
+                        hexSHA256hash.append(hexString);
+                    }
+
+                    String profileId = hexSHA256hash.substring(0, 6) + account.getAccountIdx();
+                    account.setDefault(profileId);
+                }
+            } catch (Exception e) {
+                return null;
+            }
 
         accountRepository.save(account);
 
