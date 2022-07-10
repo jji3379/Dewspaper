@@ -17,5 +17,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> findAllByPostIdxAndDelYn(Pageable pageable, Post postIdx, String delYn);
     List<Comment> findByPostIdxAndDelYn(Post postIdx, String delYn);
     Optional<Comment> findByPostIdxAndCommentIdxAndDelYn(Post postIdx, Long commentIdx, String delYn);
+    List<Comment> findByAccountIdxAndDelYn(Account accountIdx, String delYn);
     long countByAccountIdx(Account accountIdx);
 }

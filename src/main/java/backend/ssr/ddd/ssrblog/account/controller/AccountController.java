@@ -72,6 +72,13 @@ public class AccountController {
         return new ResponseEntity<>(updateAccount.toResponse(), HttpStatus.OK);
     }
 
+    @DeleteMapping("/account") @ApiOperation(value = "회원 정보 삭제", notes = "토큰 정보로 삭제할 회원을 구별한다. <br>회원을 삭제할 시 회원이 작성한 글, 댓글, 친구 목록이 삭제된다. <br>삭제되는 회원이 realWriter 일 경우, coWriter 가 남아있을 경우 글은 삭제되지 않는다. <br>하지만, 혼자 작성한 글의 경우 (cowriter 가 본인만 있을 경우) 는 글도 삭제된다.")
+    public ResponseEntity<AccountProfileResponse> deleteAccount(Authentication authentication) {
+        accountService.deleteAccount(authentication);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/refresh-token") @ApiOperation(value = "토큰 재발급", notes = "refresh-token 을 header 에 입력하여 새로운 토큰을 발급 받는다.")
     @ApiImplicitParam(name = "refreshToken", value = "예 : {\"refreshToken\":\"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqamkzMzc5QGdtYWlsLmNvbSIsInJvbGVzIjoiVVNFUiIsImlzcyI6Imdvb2dsZSIsImlhdCI6MTY1NjMzMTA2NiwiZXhwIjoxNjU4MDU5MDY2fQ.ticCxI1evjHweL1ehvRpCfFHjzHFtvP4C_PO-sN7CqA\"}", required = true)
     public String getRefreshToken(@RequestBody Map<String, String> refreshToken) {

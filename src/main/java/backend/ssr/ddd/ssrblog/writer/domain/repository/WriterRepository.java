@@ -20,5 +20,8 @@ public interface WriterRepository extends JpaRepository<Writer, WriterId> {
 
     Page<Writer> findByAccountIdxAndRealWriterAndDelYnOrderByCreateDateDesc(Pageable pageable, Account accountIdx, Account realWriter, String delYn);
 
+    List<Writer> findByAccountIdxAndDelYn(Account accountIdx, String delYn);
+
     long countByAccountIdx(Account accountIdx);
+    long countByPostIdxAndDelYn(Post postIdx, String delYn);
 }

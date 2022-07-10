@@ -14,6 +14,7 @@ public interface FriendsRepository extends JpaRepository<Friends, FriendsId> {
 
     List<Friends> findByAccepterIdx(Account accepterIdx);
     Optional<Friends> findByRequesterIdxAndAccepterIdx(Account requesterIdx, Account accepterIdx);
+    List<Friends> findByRequesterIdxOrAccepterIdx(Account requesterIdx, Account accepterIdx);
     List<Friends> findByRequesterIdx(Account accepterIdx);
 
     long countByRequesterIdxOrAccepterIdx(Account requsterIdx, Account accepterIdx);
