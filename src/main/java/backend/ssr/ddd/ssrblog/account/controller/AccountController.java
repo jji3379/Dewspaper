@@ -32,33 +32,17 @@ import java.util.Map;
 public class AccountController {
 
     private final AccountService accountService;
-    private final CommentService commentService;
-    private final FriendService friendService;
-    private final WriterService writerService;
     private final PostService postService;
 
-    @GetMapping("/account/{accountIdx}") @ApiOperation(value = "회원 정보 조회", notes = "회원의 상세 정보를 조회 한다. <br>전체 글의 수, 댓글의 수, 크루의 수 등 포함.  <br>다른 사람도 나의 정보를 볼 수 있기에 idx 포함.  <br>토큰값과 idx 회원이 같을 경우 owner : true)")
+    @GetMapping("/account/{accountIdx}") @ApiOperation(value = "회원 정보 조회", notes = "회원의 상세 정보를 조회 한다. <br>전체 글의 수, 댓글의 수, 크루의 수 등 포함.  <br>다른 사람도 나의 정보를 볼 수 있기에 idx 포함.  <br>토큰값과 idx 회원이 같을 경우 owner : true  <br>크루로 등록되어 있을 경우 crew : true")
     @ApiImplicitParam(name = "accountIdx", value = "8", required = true)
     public ResponseEntity<AccountProfileResponse> getAccountProfile(@PathVariable Account accountIdx, Authentication authentication) {
-        boolean owner = false; // 블로그의 주인을 확인
+        AccountProfileResponse accountProfile = accountService.getAccountProfile(accountIdx, authentication);
 
-        Account accountProfile = accountService.getAccountProfile(accountIdx.getAccountIdx());
-
-        if (authentication != null) { // 토큰이 있을 경우
-            Account tokenValue = (Account) authentication.getPrincipal();
-            if (accountProfile.getEmail().equals(tokenValue.getEmail()) && accountProfile.getPlatform().equals(tokenValue.getPlatform())) { // 이메일과 플랫폼이 요청한 accountIdx 의 회원과 같을 경우
-                owner = true; // 주인임을 나타냄
-            }
-        }
-
-        long postCount = writerService.getAccountPostCount(accountIdx); // 내가 작성한 글의 개수
-        long commentCount = commentService.getAccountCommentCount(accountIdx); // 내가 작성한 댓글의 개수
-        long friendsCount = friendService.getAccountFriendsCount(accountIdx); // 내 친구 수
-
-        return new ResponseEntity<>(accountProfile.toProfileResponse(postCount, commentCount, friendsCount, owner), HttpStatus.OK);
+        return new ResponseEntity<>(accountProfile, HttpStatus.OK);
     }
 
-    @GetMapping("/account/posts/{display}") @ApiOperation(value = "내가 쓴 글 보기 (로그인 필수)", notes = "내가 작성한 공개 또는 비공개 글 목록을 조회 한다. (나의 글이기 때문에 idx 값이 아닌 '토큰으로만' 판별한다.)")
+    @GetMapping("/account/posts/{display}") @ApiOperation(value = "내가 쓴 글 보기 (공개, 비공개)", notes = "내가 작성한 공개 또는 비공개 글 목록을 조회 한다. (나의 글이기 때문에 idx 값이 아닌 '토큰으로만' 판별한다.)")
     @ApiImplicitParam(name = "display", value = "public(공개), private(비공개)", required = true)
     public ResponseEntity<Page<PostResponse>> getMyPostList(Authentication authentication, Pageable pageable, @PathVariable String display) {
         Account account = (Account) authentication.getPrincipal();

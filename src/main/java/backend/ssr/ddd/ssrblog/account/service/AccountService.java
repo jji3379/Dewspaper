@@ -3,13 +3,19 @@ package backend.ssr.ddd.ssrblog.account.service;
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
 import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileRequest;
+import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileResponse;
+import backend.ssr.ddd.ssrblog.comment.service.CommentService;
 import backend.ssr.ddd.ssrblog.common.Exception.CustomException;
 import backend.ssr.ddd.ssrblog.common.Exception.ErrorCode;
+import backend.ssr.ddd.ssrblog.friends.service.FriendService;
 import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
-import backend.ssr.ddd.ssrblog.post.domain.repository.PostRepository;
+import backend.ssr.ddd.ssrblog.writer.service.WriterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,10 +25,34 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public Account getAccountProfile(Long accountIdx) {
+    private final CommentService commentService;
+    private final FriendService friendService;
+    private final WriterService writerService;
 
-        return accountRepository.findByAccountIdxAndWithdrawal(accountIdx, "N")
+    public AccountProfileResponse getAccountProfile(Account accountIdx, Authentication authentication) {
+        boolean owner = false; // 블로그의 주인을 확인
+        boolean isCrew = false; // 크루 여부
+
+        Account accountProfile = accountRepository.findByAccountIdxAndWithdrawal(accountIdx.getAccountIdx(), "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
+
+        if (authentication != null) { // 토큰이 있을 경우
+            Account tokenValue = (Account) authentication.getPrincipal();
+            if (accountProfile.getEmail().equals(tokenValue.getEmail()) && accountProfile.getPlatform().equals(tokenValue.getPlatform())) { // 이메일과 플랫폼이 요청한 accountIdx 의 회원과 같을 경우
+                owner = true; // 주인임을 나타냄
+            }
+            List<Account> friendsList = friendService.getFriendsList(tokenValue);
+
+            if (friendsList.contains(accountIdx)) {
+                isCrew = true;
+            }
+        }
+
+        long postCount = writerService.getAccountPostCount(accountIdx); // 내가 작성한 글의 개수
+        long commentCount = commentService.getAccountCommentCount(accountIdx); // 내가 작성한 댓글의 개수
+        long friendsCount = friendService.getAccountFriendsCount(accountIdx); // 내 친구 수
+
+        return accountProfile.toProfileResponse(postCount, commentCount, friendsCount, owner, isCrew);
     }
 
     public Account updateAccountProfile(String email, String platform, AccountProfileRequest accountProfileRequest) {
