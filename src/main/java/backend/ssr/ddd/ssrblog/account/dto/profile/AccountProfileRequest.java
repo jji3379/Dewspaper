@@ -17,19 +17,11 @@ public class AccountProfileRequest {
     @ApiModelProperty(value = "작가 소개", example = "안녕하세요! 저는 DDD 의 서버 개발자 DDD 입니다.", position = 4)
     private String introduction;
 
-    @ApiModelProperty(value = "이메일 수신 동의", example = "N", position = 5)
-    private String emailAgree;
-
-    @ApiModelProperty(value = "알림 동의", example = "N", position = 6)
-    private String alarmAgree;
-
     @Builder
-    public AccountProfileRequest(String name, String profileImg, String blogName, String introduction, String emailAgree, String alarmAgree) {
+    public AccountProfileRequest(String name, String profileImg, String blogName, String introduction) {
         this.name = name;
         this.profileImg = profileImg;
         this.blogName = blogName;
         this.introduction = introduction;
-        this.emailAgree = emailAgree;
-        this.alarmAgree = alarmAgree;
     }
 }

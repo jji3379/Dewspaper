@@ -2,6 +2,7 @@ package backend.ssr.ddd.ssrblog.account.controller;
 
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
+import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileAlarmRequest;
 import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileRequest;
 import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileResponse;
 import backend.ssr.ddd.ssrblog.account.service.AccountService;
@@ -63,11 +64,20 @@ public class AccountController {
         return new ResponseEntity<>(myPostsOrTagList, HttpStatus.OK);
     }
 
-    @PutMapping("/account") @ApiOperation(value = "회원 정보 수정", notes = "회원의 정보를 수정 한다.")
+    @PutMapping("/account/profile") @ApiOperation(value = "회원 정보 수정", notes = "회원의 정보를 수정 한다. (이름, 블로그 이름, 소개)")
     public ResponseEntity<AccountResponse> updateAccountProfile(Authentication authentication, @RequestBody AccountProfileRequest accountProfileRequest) {
         Account account = (Account) authentication.getPrincipal();
 
         Account updateAccount = accountService.updateAccountProfile(account.getEmail(), account.getPlatform(), accountProfileRequest);
+
+        return new ResponseEntity<>(updateAccount.toResponse(), HttpStatus.OK);
+    }
+
+    @PutMapping("/account/alarm") @ApiOperation(value = "이메일 수신 설정", notes = "이메일과 알림 수신 설정을 수정한다.")
+    public ResponseEntity<AccountResponse> updateAccountProfileAlarm(Authentication authentication, @RequestBody AccountProfileAlarmRequest accountProfileAlarmRequest) {
+        Account account = (Account) authentication.getPrincipal();
+
+        Account updateAccount = accountService.updateAccountProfileAlarm(account.getEmail(), account.getPlatform(), accountProfileAlarmRequest);
 
         return new ResponseEntity<>(updateAccount.toResponse(), HttpStatus.OK);
     }

@@ -2,6 +2,7 @@ package backend.ssr.ddd.ssrblog.account.domain.entity;
 
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import backend.ssr.ddd.ssrblog.account.dto.Role;
+import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileAlarmRequest;
 import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileRequest;
 import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileResponse;
 import backend.ssr.ddd.ssrblog.common.TimeEntity.BaseTimeEntity;
@@ -116,8 +117,13 @@ public class Account extends BaseTimeEntity implements UserDetails {
         this.profileImg = accountProfileRequest.getProfileImg();
         this.blogName = accountProfileRequest.getBlogName();
         this.introduction = accountProfileRequest.getIntroduction();
-        this.alarmAgree = accountProfileRequest.getAlarmAgree();
-        this.emailAgree = accountProfileRequest.getEmailAgree();
+
+        return this;
+    }
+
+    public Account updateProfileAlarm(AccountProfileAlarmRequest accountProfileAlarmRequest) {
+        this.alarmAgree = accountProfileAlarmRequest.getAlarmAgree();
+        this.emailAgree = accountProfileAlarmRequest.getEmailAgree();
 
         return this;
     }

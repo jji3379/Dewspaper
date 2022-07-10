@@ -2,6 +2,7 @@ package backend.ssr.ddd.ssrblog.account.service;
 
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
+import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileAlarmRequest;
 import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileRequest;
 import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileResponse;
 import backend.ssr.ddd.ssrblog.comment.domain.entity.Comment;
@@ -39,7 +40,6 @@ public class AccountService {
     private final CommentRepository commentRepository;
     private final WriterRepository writerRepository;
     private final FriendsRepository friendsRepository;
-    private final PostRepository postRepository;
 
     public AccountProfileResponse getAccountProfile(Account accountIdx, Authentication authentication) {
         boolean owner = false; // 블로그의 주인을 확인
@@ -68,11 +68,19 @@ public class AccountService {
     }
 
     public Account updateAccountProfile(String email, String platform, AccountProfileRequest accountProfileRequest) {
-
         Account account = accountRepository.findByEmailAndPlatformAndWithdrawal(email, platform, "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
 
         account.updateProfile(accountProfileRequest);
+
+        return accountRepository.save(account);
+    }
+
+    public Account updateAccountProfileAlarm(String email, String platform, AccountProfileAlarmRequest accountProfileAlarmRequest) {
+        Account account = accountRepository.findByEmailAndPlatformAndWithdrawal(email, platform, "N")
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
+
+        account.updateProfileAlarm(accountProfileAlarmRequest);
 
         return accountRepository.save(account);
     }
