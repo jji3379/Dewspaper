@@ -14,6 +14,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public class FriendService {
     /**
      * 친구 요청 받은 목록 리스트
      */
+    @Transactional(readOnly = true)
     public List<Friends> getRequiredFriendsList(Account accepterIdx) {
 
         return friendsRepository.findByAccepterIdx(accepterIdx);
@@ -40,6 +42,7 @@ public class FriendService {
     /**
      * 친구 목록 리스트
      */
+    @Transactional(readOnly = true)
     public List<Account> getFriendsList(Account accountIdx) {
         QFriends qFriends = QFriends.friends;
         QAccount qAccount = QAccount.account;
@@ -67,6 +70,7 @@ public class FriendService {
     /**
      * 내가 보낸 친구 요청
      */
+    @Transactional(readOnly = true)
     public List<Friends> getRequireToFriendsList(Account requesterIdx) {
 
         return friendsRepository.findByRequesterIdx(requesterIdx);
@@ -75,6 +79,7 @@ public class FriendService {
     /**
      * 친구 요청
      */
+    @Transactional
     public Friends newFriendRequest(FriendsRequest friendsRequest) {
         // 요청자가 회원인지 확인
         accountRepository.findById(friendsRequest.getRequesterIdx().getAccountIdx())
@@ -100,6 +105,7 @@ public class FriendService {
     /**
      * 친구 수락
      */
+    @Transactional
     public Friends acceptFriend(FriendsRequest friendsRequest) {
         Friends getRequesterRequest = friendsRepository.findByRequesterIdxAndAccepterIdx(friendsRequest.getRequesterIdx(), friendsRequest.getAccepterIdx())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST));
@@ -125,6 +131,7 @@ public class FriendService {
     /**
      * 친구 삭제
      */
+    @Transactional
     public void deleteFriend(Account requesterIdx, Account accepterIdx) {
         Optional<Friends> requesterFriend = friendsRepository.findByRequesterIdxAndAccepterIdx(requesterIdx, accepterIdx);
         Optional<Friends> accepterFriend = friendsRepository.findByRequesterIdxAndAccepterIdx(accepterIdx, requesterIdx);
@@ -140,6 +147,7 @@ public class FriendService {
 
     }
 
+    @Transactional(readOnly = true)
     public long getAccountFriendsCount(Account accountIdx) {
 
         return friendsRepository.countByRequesterIdxOrAccepterIdx(accountIdx, accountIdx);

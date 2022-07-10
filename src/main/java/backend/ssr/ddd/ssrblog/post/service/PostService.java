@@ -8,7 +8,6 @@ import backend.ssr.ddd.ssrblog.comment.domain.repository.CommentRepository;
 import backend.ssr.ddd.ssrblog.common.Exception.CustomException;
 import backend.ssr.ddd.ssrblog.common.Exception.ErrorCode;
 import backend.ssr.ddd.ssrblog.post.domain.entity.Post;
-import backend.ssr.ddd.ssrblog.post.domain.entity.QPost;
 import backend.ssr.ddd.ssrblog.post.domain.repository.PostRepository;
 import backend.ssr.ddd.ssrblog.post.dto.PostRequest;
 import backend.ssr.ddd.ssrblog.post.dto.PostResponse;
@@ -187,6 +186,7 @@ public class PostService {
     /**
      * post 에 속해있는 writer 의 정보 조회
      */
+    @Transactional(readOnly = true)
     public WriterResponse getCoWriterInfo(Post post) {
         // 함께 작성한 사람을 찾고
         List<Writer> postWriterInfo = writerRepository.findByPostIdxAndDelYn(post, "N");
@@ -213,6 +213,7 @@ public class PostService {
     /**
      * 회원이 작성한 글 목록
      */
+    @Transactional(readOnly = true)
     public Page<PostResponse> getMyPosts(Pageable pageable, Account accountIdx, String display) {
         QWriter qWriter = QWriter.writer;
 
@@ -242,6 +243,7 @@ public class PostService {
         return new PageImpl<>(postResponseList, pageable, pagePostList.getTotal());
     }
 
+    @Transactional(readOnly = true)
     public Page<PostResponse> getMyPostsOrTagList(Pageable pageable, Account accountIdx, String tab) {
         QWriter qWriter = QWriter.writer;
 

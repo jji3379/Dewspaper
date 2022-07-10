@@ -14,7 +14,6 @@ import backend.ssr.ddd.ssrblog.friends.domain.entity.Friends;
 import backend.ssr.ddd.ssrblog.friends.domain.repository.FriendsRepository;
 import backend.ssr.ddd.ssrblog.friends.service.FriendService;
 import backend.ssr.ddd.ssrblog.oauth.jwt.JwtTokenProvider;
-import backend.ssr.ddd.ssrblog.post.domain.repository.PostRepository;
 import backend.ssr.ddd.ssrblog.writer.domain.entity.Writer;
 import backend.ssr.ddd.ssrblog.writer.domain.repository.WriterRepository;
 import backend.ssr.ddd.ssrblog.writer.service.WriterService;
@@ -22,10 +21,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +40,7 @@ public class AccountService {
     private final WriterRepository writerRepository;
     private final FriendsRepository friendsRepository;
 
+    @Transactional(readOnly = true)
     public AccountProfileResponse getAccountProfile(Account accountIdx, Authentication authentication) {
         boolean owner = false; // 블로그의 주인을 확인
         boolean isCrew = false; // 크루 여부
@@ -67,6 +67,7 @@ public class AccountService {
         return accountProfile.toProfileResponse(postCount, commentCount, friendsCount, owner, isCrew);
     }
 
+    @Transactional
     public Account updateAccountProfile(String email, String platform, AccountProfileRequest accountProfileRequest) {
         Account account = accountRepository.findByEmailAndPlatformAndWithdrawal(email, platform, "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
@@ -76,6 +77,7 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    @Transactional
     public Account updateAccountProfileAlarm(String email, String platform, AccountProfileAlarmRequest accountProfileAlarmRequest) {
         Account account = accountRepository.findByEmailAndPlatformAndWithdrawal(email, platform, "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
@@ -85,6 +87,7 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
+    @Transactional(readOnly = true)
     public String getReissueToken(String refreshToken) {
         log.info("Get client refreshToken : {}", refreshToken);
 
@@ -94,6 +97,7 @@ public class AccountService {
         return reIssueToken;
     }
 
+    @Transactional(readOnly = true)
     public Account getAccountInfo(String email, String platform) {
 
         return accountRepository.findByEmailAndPlatformAndWithdrawal(email, platform, "N").orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));

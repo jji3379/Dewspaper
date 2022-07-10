@@ -14,8 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
+import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -31,6 +30,7 @@ public class CommentService {
         return commentRepository.findAllByPostIdxAndDelYn(pageable, postIdx, "N");
     }
 
+    @Transactional
     public Comment saveComment(Long postIdx, CommentRequest commentRequest) {
         postRepository.findById(postIdx)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
@@ -43,6 +43,7 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    @Transactional
     public Comment updateComment(Post postIdx, Long commentIdx, CommentRequest commentRequest) {
         Comment comment = commentRepository.findByPostIdxAndCommentIdxAndDelYn(postIdx, commentIdx, "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMNET));
@@ -56,6 +57,7 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    @Transactional
     public void deleteComment(Post postIdx, Long commentIdx) {
         Comment comment = commentRepository.findByPostIdxAndCommentIdxAndDelYn(postIdx, commentIdx, "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_COMMNET));
@@ -65,6 +67,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    @Transactional(readOnly = true)
     public long getAccountCommentCount(Account accountIdx) {
 
         return commentRepository.countByAccountIdx(accountIdx);
