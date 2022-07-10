@@ -12,21 +12,24 @@ public class AccountProfileRequest {
     @ApiModelProperty(value = "프로필 이미지", example = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIn1iNdqod_ukBY45LqZNCn89wDQMsfxhncg&usqp=CAU", position = 2)
     private String profileImg;
 
-    @ApiModelProperty(value = "작가 소개", example = "안녕하세요! 저는 DDD 의 서버 개발자 DDD 입니다.", position = 3)
+    @ApiModelProperty(value = "블로그 이름", example = "문건우의 우당탕탕 개발일지", position = 3)
+    private String blogName;
+    @ApiModelProperty(value = "작가 소개", example = "안녕하세요! 저는 DDD 의 서버 개발자 DDD 입니다.", position = 4)
     private String introduction;
 
-    @ApiModelProperty(value = "이메일 수신 동의", example = "N", position = 4)
-    private String emailAg;
+    @ApiModelProperty(value = "이메일 수신 동의", example = "N", position = 5)
+    private String emailAgree;
 
-    @ApiModelProperty(value = "알림 동의", example = "N", position = 5)
-    private String alarmAg;
+    @ApiModelProperty(value = "알림 동의", example = "N", position = 6)
+    private String alarmAgree;
 
     @Builder
-    public AccountProfileRequest(String name, String profileImg, String introduction, String emailAg, String alarmAg) {
+    public AccountProfileRequest(String name, String profileImg, String blogName, String introduction, String emailAgree, String alarmAgree) {
         this.name = name;
         this.profileImg = profileImg;
+        this.blogName = blogName;
         this.introduction = introduction;
-        this.emailAg = emailAg;
-        this.alarmAg = alarmAg;
+        this.emailAgree = emailAgree;
+        this.alarmAgree = alarmAgree;
     }
 }

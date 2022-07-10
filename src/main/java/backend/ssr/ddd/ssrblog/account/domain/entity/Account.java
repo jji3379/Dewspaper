@@ -31,6 +31,8 @@ public class Account extends BaseTimeEntity implements UserDetails {
 
     private String name;
 
+    private String blogName;
+
     private String profileImg;
 
     @Enumerated(EnumType.STRING)
@@ -38,9 +40,9 @@ public class Account extends BaseTimeEntity implements UserDetails {
 
     private String introduction;
 
-    private String emailAg = "N";
+    private String emailAgree = "N";
 
-    private String alarmAg = "N";
+    private String alarmAgree = "N";
 
     private String withdrawal = "N";
 
@@ -50,11 +52,12 @@ public class Account extends BaseTimeEntity implements UserDetails {
                 .platform(platform)
                 .email(email)
                 .name(name)
+                .blogName(blogName)
                 .profileImg(profileImg)
                 .role(role.getRole())
                 .introduction(introduction)
-                .emailAg(emailAg)
-                .alarmAg(alarmAg)
+                .emailAgree(emailAgree)
+                .alarmAgree(alarmAgree)
                 .createDate(getCreateDate())
                 .updateDate(getUpdateDate())
                 .withdrawal(withdrawal)
@@ -62,39 +65,42 @@ public class Account extends BaseTimeEntity implements UserDetails {
         return build;
     }
 
-    public AccountProfileResponse toProfileResponse(long postCount, long commentCount, long crewCount, boolean owner) {
+    public AccountProfileResponse toProfileResponse(long postCount, long commentCount, long crewCount, boolean owner, boolean isCrew) {
         AccountProfileResponse build = AccountProfileResponse.builder()
                 .accountIdx(accountIdx)
                 .profileId(profileId)
                 .email(email)
                 .platform(platform)
                 .name(name)
+                .blogName(blogName)
                 .role(role.getRole())
                 .profileImg(profileImg)
                 .introduction(introduction)
-                .emailAg(emailAg)
-                .alarmAg(alarmAg)
+                .emailAgree(emailAgree)
+                .alarmAgree(alarmAgree)
                 .owner(owner)
                 .postCount(postCount)
                 .commentCount(commentCount)
                 .crewCount(crewCount)
+                .isCrew(isCrew)
                 .build();
 
         return build;
     }
 
     @Builder
-    public Account(Long accountIdx, String profileId, String platform, String email, String name, String profileImg, Role role, String introduction, String emailAg, String alarmAg, String withdrawal) {
+    public Account(Long accountIdx, String profileId, String platform, String email, String name, String blogName, String profileImg, Role role, String introduction, String emailAgree, String alarmAgree, String withdrawal) {
         this.accountIdx = accountIdx;
         this.profileId = profileId;
         this.platform = platform;
         this.email = email;
         this.name = name;
+        this.blogName = blogName;
         this.profileImg = profileImg;
         this.role = role;
         this.introduction = introduction;
-        this.emailAg = emailAg;
-        this.alarmAg = alarmAg;
+        this.emailAgree = emailAgree;
+        this.alarmAgree = alarmAgree;
         this.withdrawal = withdrawal;
     }
 
@@ -108,9 +114,10 @@ public class Account extends BaseTimeEntity implements UserDetails {
     public Account updateProfile(AccountProfileRequest accountProfileRequest) {
         this.name = accountProfileRequest.getName();
         this.profileImg = accountProfileRequest.getProfileImg();
+        this.blogName = accountProfileRequest.getBlogName();
         this.introduction = accountProfileRequest.getIntroduction();
-        this.alarmAg = accountProfileRequest.getAlarmAg();
-        this.emailAg = accountProfileRequest.getEmailAg();
+        this.alarmAgree = accountProfileRequest.getAlarmAgree();
+        this.emailAgree = accountProfileRequest.getEmailAgree();
 
         return this;
     }
@@ -120,10 +127,11 @@ public class Account extends BaseTimeEntity implements UserDetails {
     }
 
     public Account setDefault(String profileId) {
-        this.emailAg = "N";
-        this.alarmAg = "N";
+        this.emailAgree = "N";
+        this.alarmAgree = "N";
         this.withdrawal = "N";
         this.profileId = profileId;
+        this.blogName = name + "님의 블로그";
 
         return this;
     }

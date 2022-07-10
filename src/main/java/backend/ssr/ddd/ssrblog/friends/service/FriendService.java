@@ -44,11 +44,6 @@ public class FriendService {
         QFriends qFriends = QFriends.friends;
         QAccount qAccount = QAccount.account;
 
-        // account 에서 friends 에서 8 말고 값들 뽑기
-
-        // friends 에서 목록들 뽑아서
-
-
         List<Account> requesterFriendsList = jpaQueryFactory.select(qAccount).distinct()
                 .from(qAccount)
                 .where(qAccount.accountIdx.in(
