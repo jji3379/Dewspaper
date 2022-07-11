@@ -24,11 +24,8 @@ public class JwtTokenProvider {
 
     private final CustomUserDetailService customUserDetailService;
 
-//    private Long tokenValidMilisecond = 1000L * 60 * 60; // 1시간만 토큰 유효
-//    private Long refreshValidMilisecond = 1000L * 60 * 60 * 24 * 7; // 7일 토큰 유효
-
-    private Long tokenValidMilisecond = 1000L * 20; // 프론트 테스트 20초
-    private Long refreshValidMilisecond = 1000L * 60 * 2; // 프론트 테스트 60초
+    private Long tokenValidMilisecond = 1000L * 60 * 60 * 2; // 2시간만 토큰 유효
+    private Long refreshValidMilisecond = 1000L * 60 * 60 * 24 * 14; // 14일 토큰 유효
 
     @PostConstruct
     protected void init() {
