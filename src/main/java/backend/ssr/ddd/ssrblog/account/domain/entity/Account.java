@@ -2,6 +2,7 @@ package backend.ssr.ddd.ssrblog.account.domain.entity;
 
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import backend.ssr.ddd.ssrblog.account.dto.Role;
+import backend.ssr.ddd.ssrblog.account.dto.friends.AccountFriendsResponse;
 import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileAlarmRequest;
 import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileRequest;
 import backend.ssr.ddd.ssrblog.account.dto.profile.AccountProfileResponse;
@@ -62,6 +63,16 @@ public class Account extends BaseTimeEntity implements UserDetails {
                 .createDate(getCreateDate())
                 .updateDate(getUpdateDate())
                 .withdrawal(withdrawal)
+                .build();
+        return build;
+    }
+
+    // 친구 목록
+    public AccountFriendsResponse toFriendsResponse() {
+        AccountFriendsResponse build = AccountFriendsResponse.builder()
+                .accountIdx(accountIdx)
+                .name(name)
+                .profileImg(profileImg)
                 .build();
         return build;
     }

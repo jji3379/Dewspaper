@@ -32,7 +32,9 @@ public class FriendsRequest {
         Friends build = Friends.builder()
                 .requesterIdx(Account.builder().accountIdx(requesterIdx).build())
                 .accepterIdx(Account.builder().accountIdx(accepterIdx).build())
-                .accepted("N")
+                .accepted("W")
+                .noticeCheckYn("N")
+                .noticeDelYn("N")
                 .build();
 
         return build;

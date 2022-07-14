@@ -8,13 +8,20 @@ import backend.ssr.ddd.ssrblog.common.Exception.ErrorCode;
 import backend.ssr.ddd.ssrblog.friends.domain.entity.Friends;
 import backend.ssr.ddd.ssrblog.friends.domain.entity.QFriends;
 import backend.ssr.ddd.ssrblog.friends.domain.repository.FriendsRepository;
+import backend.ssr.ddd.ssrblog.friends.dto.FriendsNoticeResponse;
 import backend.ssr.ddd.ssrblog.friends.dto.FriendsRequest;
+import backend.ssr.ddd.ssrblog.friends.dto.FriendsResponse;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,12 +38,17 @@ public class FriendService {
     // 요청 받은 사람의 입장이기 때문에 accepterIdx 를 파라미터로 받는다.
 
     /**
-     * 친구 요청 받은 목록 리스트
+     * 친구 알림 목록
      */
-    @Transactional(readOnly = true)
-    public List<Friends> getRequiredFriendsList(Account accepterIdx) {
+    public Page<FriendsNoticeResponse> getNoticeList(Pageable pageable, Account accountIdx) {
+        Page<Friends> getNoticeList = friendsRepository.findByRequesterIdxOrAccepterIdxAndNoticeDelYnOrderByRequestDateTimeDesc(pageable, accountIdx, accountIdx, "N");
 
-        return friendsRepository.findByAccepterIdx(accepterIdx);
+        List<FriendsNoticeResponse> friendsResponseList = new ArrayList<>();
+        for (Friends friends : getNoticeList) {
+            friendsResponseList.add(friends.toNoticeResponse());
+        }
+
+        return new PageImpl<>(friendsResponseList, pageable, getNoticeList.getTotalElements());
     }
 
     /**

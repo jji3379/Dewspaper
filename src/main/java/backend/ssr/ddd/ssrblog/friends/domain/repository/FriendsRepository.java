@@ -3,6 +3,8 @@ package backend.ssr.ddd.ssrblog.friends.domain.repository;
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.friends.domain.entity.Friends;
 import backend.ssr.ddd.ssrblog.friends.domain.entity.FriendsId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +18,6 @@ public interface FriendsRepository extends JpaRepository<Friends, FriendsId> {
     Optional<Friends> findByRequesterIdxAndAccepterIdx(Account requesterIdx, Account accepterIdx);
     List<Friends> findByRequesterIdxOrAccepterIdx(Account requesterIdx, Account accepterIdx);
     List<Friends> findByRequesterIdx(Account accepterIdx);
-
+    Page<Friends> findByRequesterIdxOrAccepterIdxAndNoticeDelYnOrderByRequestDateTimeDesc(Pageable pageable, Account requesterIdx, Account accepterIdx, String noticeDelYn);
     long countByRequesterIdxOrAccepterIdx(Account requsterIdx, Account accepterIdx);
 }

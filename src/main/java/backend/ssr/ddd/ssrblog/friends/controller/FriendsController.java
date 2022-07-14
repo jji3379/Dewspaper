@@ -4,6 +4,7 @@ import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.account.domain.repository.AccountRepository;
 import backend.ssr.ddd.ssrblog.account.dto.AccountResponse;
 import backend.ssr.ddd.ssrblog.friends.domain.entity.Friends;
+import backend.ssr.ddd.ssrblog.friends.dto.FriendsNoticeResponse;
 import backend.ssr.ddd.ssrblog.friends.dto.FriendsRequest;
 import backend.ssr.ddd.ssrblog.friends.dto.FriendsResponse;
 import backend.ssr.ddd.ssrblog.friends.service.FriendService;
@@ -12,8 +13,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -64,20 +68,15 @@ public class FriendsController {
     }
 
     /**
-     * 친구 요청 받은 목록 리스트
+     * 친구 알림 목록
      */
-    @GetMapping("/friends/{accepterIdx}/required") @ApiOperation(value = "친구 요청 받은 목록 리스트", notes = "요청 받은 목록 리스트 (수락해줘야 하기에 accpeterIdx 을 입력)")
-    @ApiImplicitParam(name = "accepterIdx", required = true, value = "예 : 8")
-    public ResponseEntity<List<FriendsResponse>> getRequiredFriendsList(@PathVariable Account accepterIdx) {
-        List<Friends> requiredFriendsList = friendService.getRequiredFriendsList(accepterIdx);
+    @GetMapping("/friends/notice") @ApiOperation(value = "친구 알림 목록", notes = "친구 알림 목록 리스트 \n액세스 토큰을 받아 회원의 알림 목록을 보여준다. \nnoticeCheckYn 은 수락 : Y, 대기 : W(Waiting), 거절 : N 을 사용한다. \n알림을 삭제하면 noticeDelYn 은 Y 가 된다.")
+    public ResponseEntity<Page<FriendsNoticeResponse>> getNoticeList(Pageable pageable, Authentication authentication) {
+        Account account = (Account) authentication.getPrincipal();
 
-        List<FriendsResponse> responseList = new ArrayList<>();
+        Page<FriendsNoticeResponse> getNoticeList = friendService.getNoticeList(pageable, account);
 
-        for (Friends friends : requiredFriendsList) {
-            responseList.add(friends.toResponse());
-        }
-
-        return new ResponseEntity(responseList, HttpStatus.OK);
+        return new ResponseEntity(getNoticeList, HttpStatus.OK);
     }
 
     /**

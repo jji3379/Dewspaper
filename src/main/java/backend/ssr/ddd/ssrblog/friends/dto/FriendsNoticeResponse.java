@@ -1,6 +1,6 @@
 package backend.ssr.ddd.ssrblog.friends.dto;
 
-import io.swagger.annotations.ApiModel;
+import backend.ssr.ddd.ssrblog.account.dto.friends.AccountFriendsResponse;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,16 +10,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
-@Getter
 @NoArgsConstructor
-@ApiModel(description = "친구 요청 응답 정보")
-public class FriendsResponse {
-
+@Getter
+public class FriendsNoticeResponse {
     @ApiModelProperty(value = "신청 회원", example = "8", position = 1)
-    private Long requesterIdx;
+    private AccountFriendsResponse requesterIdx;
 
     @ApiModelProperty(value = "수락 회원", example = "11", position = 2)
-    private Long accepterIdx;
+    private AccountFriendsResponse accepterIdx;
 
     @ApiModelProperty(value = "수락 여부", example = "W", position = 3)
     private String accepted;
@@ -38,7 +36,7 @@ public class FriendsResponse {
     private LocalDateTime acceptedDateTime;
 
     @Builder
-    public FriendsResponse(Long requesterIdx, Long accepterIdx, String accepted, String noticeCheckYn, String noticeDelYn, LocalDateTime requestDateTime, LocalDateTime acceptedDateTime) {
+    public FriendsNoticeResponse(AccountFriendsResponse requesterIdx, AccountFriendsResponse accepterIdx, String accepted, String noticeCheckYn, String noticeDelYn, LocalDateTime requestDateTime, LocalDateTime acceptedDateTime) {
         this.requesterIdx = requesterIdx;
         this.accepterIdx = accepterIdx;
         this.accepted = accepted;
