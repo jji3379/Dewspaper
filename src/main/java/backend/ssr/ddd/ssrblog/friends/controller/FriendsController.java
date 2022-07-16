@@ -117,10 +117,19 @@ public class FriendsController {
     }
 
     /**
+     * 새로운 알림 확인 여부
+     */
+    @GetMapping("/friends/notice/exists") @ApiOperation(value = "새로운 알림 확인 여부", notes = "새로운 알림이 있다면 true, 없다면 false 를 반환한다.")
+    public boolean newNotice(Authentication authentication) {
+        Account account = (Account) authentication.getPrincipal();
+
+        return friendService.newNotice(account);
+    }
+    /**
      * 알림 확인
      */
-    @PutMapping("/friends/alarm") @ApiOperation(value = "알림 확인", notes = "사용자 토큰을 받아 알림 확인을 처리한다.")
-    public ResponseEntity<FriendsNoticeResponse> updateAlarm(Authentication authentication) {
+    @PutMapping("/friends/notice") @ApiOperation(value = "알림 확인", notes = "사용자 토큰을 받아 알림 확인을 처리한다.")
+    public ResponseEntity<FriendsNoticeResponse> updateNotice(Authentication authentication) {
         Account account = (Account) authentication.getPrincipal();
 
         List<FriendsNoticeResponse> friendsNoticeResponseList = friendService.checkNotice(account);
@@ -131,14 +140,14 @@ public class FriendsController {
     /*
      * 알림 삭제
      */
-    @DeleteMapping("/friends/alarm/{requesterIdx}/{accepterIdx}") @ApiOperation(value = "알림 삭제", notes = "사용자 토큰을 받아 사용자를 확인한다. <br>requesterIdx 와 accepterIdx 를 받아 알림 요청을 식별한다. <br>사용자가 요청자일 경우 요청자의 알림만, 수락자일 경우 수락자의 알림만 삭제한다.")
+    @DeleteMapping("/friends/notice/{requesterIdx}/{accepterIdx}") @ApiOperation(value = "알림 삭제", notes = "사용자 토큰을 받아 사용자를 확인한다. <br>requesterIdx 와 accepterIdx 를 받아 알림 요청을 식별한다. <br>사용자가 요청자일 경우 요청자의 알림만, 수락자일 경우 수락자의 알림만 삭제한다.")
     @ApiImplicitParams(
             {
                     @ApiImplicitParam(name = "requesterIdx", required = true, value = "예 : 8"),
                     @ApiImplicitParam(name = "accepterIdx", required = true, value = "예 : 25")
             }
     )
-    public ResponseEntity deleteAlarm(Authentication authentication, @PathVariable Account requesterIdx, @PathVariable Account accepterIdx) {
+    public ResponseEntity deleteNotice(Authentication authentication, @PathVariable Account requesterIdx, @PathVariable Account accepterIdx) {
         Account account = (Account) authentication.getPrincipal();
 
         friendService.deleteNotice(account, requesterIdx, accepterIdx);

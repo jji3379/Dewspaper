@@ -127,6 +127,19 @@ public class FriendService {
     }
 
     /**
+     * 새로운 알림 존재 여부
+     */
+    public boolean newNotice(Account accountIdx) {
+        long alarmCount = friendsRepository.countByRequesterIdxAndRequesterNoticeCheckYnOrAccepterIdxAndAccepterNoticeCheckYn(accountIdx, "N", accountIdx, "N");
+
+        if (alarmCount > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * 알림 확인
      * 그 사람의 accountIdx 를 받아서
      * 그 사람이 requester 에 있는지

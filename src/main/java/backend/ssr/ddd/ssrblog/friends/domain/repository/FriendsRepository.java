@@ -30,4 +30,6 @@ public interface FriendsRepository extends JpaRepository<Friends, FriendsId> {
     Optional<Friends> findByRequesterIdxAndAccepterIdxAndRequesterNoticeDelYn(Account requesterIdx, Account accepterIdx, String requesterNoticeDelYn);
     // 수락자 알림 삭제 여부
     Optional<Friends> findByRequesterIdxAndAccepterIdxAndAccepterNoticeDelYn(Account requesterIdx, Account accepterIdx, String accepterNoticeDelYn);
+    // 새로운 알림 여부
+    long countByRequesterIdxAndRequesterNoticeCheckYnOrAccepterIdxAndAccepterNoticeCheckYn(Account requsterIdx, String requesterCheckYn, Account accepterIdx, String accepterCheckYn);
 }
