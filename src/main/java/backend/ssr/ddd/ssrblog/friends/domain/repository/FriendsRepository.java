@@ -14,10 +14,20 @@ import java.util.Optional;
 @Repository
 public interface FriendsRepository extends JpaRepository<Friends, FriendsId> {
 
-    List<Friends> findByAccepterIdx(Account accepterIdx);
     Optional<Friends> findByRequesterIdxAndAccepterIdx(Account requesterIdx, Account accepterIdx);
     List<Friends> findByRequesterIdxOrAccepterIdx(Account requesterIdx, Account accepterIdx);
     List<Friends> findByRequesterIdx(Account accepterIdx);
-    Page<Friends> findByRequesterIdxOrAccepterIdxAndNoticeDelYnOrderByRequestDateTimeDesc(Pageable pageable, Account requesterIdx, Account accepterIdx, String noticeDelYn);
+    Page<Friends> findByRequesterIdxAndRequesterNoticeDelYnOrAccepterIdxAndAccepterNoticeDelYnOrderByRequestDateTimeDesc(Pageable pageable, Account requesterIdx, String requesterDelYn, Account accepterIdx, String accepterDelYn);
+    List<Friends> findByRequesterIdxAndRequesterNoticeDelYnOrAccepterIdxAndAccepterNoticeDelYnOrderByRequestDateTimeDesc(Account requesterIdx, String requesterDelYn, Account accepterIdx, String accepterDelYn);
     long countByRequesterIdxOrAccepterIdx(Account requsterIdx, Account accepterIdx);
+
+    // 요청자 알림 확인 여부
+    List<Friends> findByRequesterIdxAndRequesterNoticeCheckYn(Account requesterIdx, String requesterNoticeCheckYn);
+    // 수락자 알림 확인 여부
+    List<Friends> findByAccepterIdxAndAccepterNoticeCheckYn(Account accepterIdx, String accepterNoticeCheckYn);
+
+    // 요청자 알림 삭제 여부
+    Optional<Friends> findByRequesterIdxAndAccepterIdxAndRequesterNoticeDelYn(Account requesterIdx, Account accepterIdx, String requesterNoticeDelYn);
+    // 수락자 알림 삭제 여부
+    Optional<Friends> findByRequesterIdxAndAccepterIdxAndAccepterNoticeDelYn(Account requesterIdx, Account accepterIdx, String accepterNoticeDelYn);
 }

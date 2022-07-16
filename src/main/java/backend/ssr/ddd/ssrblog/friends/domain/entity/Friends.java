@@ -3,11 +3,11 @@ package backend.ssr.ddd.ssrblog.friends.domain.entity;
 import backend.ssr.ddd.ssrblog.account.domain.entity.Account;
 import backend.ssr.ddd.ssrblog.common.TimeEntity.RequestAcceptTimeEntity;
 import backend.ssr.ddd.ssrblog.friends.dto.FriendsNoticeResponse;
+import backend.ssr.ddd.ssrblog.friends.dto.FriendsRequest;
 import backend.ssr.ddd.ssrblog.friends.dto.FriendsResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -30,23 +30,49 @@ public class Friends extends RequestAcceptTimeEntity {
     @Column(name = "accepted")
     private String accepted = "W";
 
-    @Column(name = "notice_check_yn")
-    private String noticeCheckYn = "N";
+    @Column(name = "requester_notice_check_yn")
+    private String requesterNoticeCheckYn = "N";
 
-    @Column(name = "notice_del_yn")
-    private String noticeDelYn = "N";
+    @Column(name = "requester_notice_del_yn")
+    private String requesterNoticeDelYn = "N";
+
+    @Column(name = "accepter_notice_check_yn")
+    private String accepterNoticeCheckYn = "N";
+
+    @Column(name = "accepter_notice_del_yn")
+    private String accepterNoticeDelYn = "N";
 
     @Builder
-    public Friends(Account requesterIdx, Account accepterIdx, String accepted, String noticeCheckYn, String noticeDelYn) {
+    public Friends(Account requesterIdx, Account accepterIdx, String accepted, String requesterNoticeCheckYn, String requesterNoticeDelYn, String accepterNoticeCheckYn, String accepterNoticeDelYn) {
         this.requesterIdx = requesterIdx;
         this.accepterIdx = accepterIdx;
         this.accepted = accepted;
-        this.noticeCheckYn = noticeCheckYn;
-        this.noticeDelYn = noticeDelYn;
+        this.requesterNoticeCheckYn = requesterNoticeCheckYn;
+        this.requesterNoticeDelYn = requesterNoticeDelYn;
+        this.accepterNoticeCheckYn = accepterNoticeCheckYn;
+        this.accepterNoticeDelYn = accepterNoticeDelYn;
     }
 
     public void acceptFriend() {
         this.accepted = "Y";
+    }
+
+    public void checkRequesterNotice() {
+        this.requesterNoticeCheckYn = "Y";
+    }
+
+    public void checkAccepterNotice() {
+        this.accepterNoticeCheckYn = "Y";
+    }
+
+    public void deleteRequesterNotice() {
+        this.requesterNoticeCheckYn = "Y";
+        this.requesterNoticeDelYn = "Y";
+    }
+
+    public void deleteAccepterNotice() {
+        this.accepterNoticeCheckYn = "Y";
+        this.accepterNoticeDelYn = "Y";
     }
 
     public FriendsResponse toResponse() {
@@ -54,8 +80,10 @@ public class Friends extends RequestAcceptTimeEntity {
                 .requesterIdx(requesterIdx.getAccountIdx())
                 .accepterIdx(accepterIdx.getAccountIdx())
                 .accepted(accepted)
-                .noticeCheckYn(noticeCheckYn)
-                .noticeDelYn(noticeDelYn)
+                .requesterNoticeCheckYn(requesterNoticeCheckYn)
+                .requesterNoticeDelYn(requesterNoticeDelYn)
+                .accepterNoticeCheckYn(accepterNoticeCheckYn)
+                .accepterNoticeDelYn(accepterNoticeDelYn)
                 .requestDateTime(getRequestDateTime())
                 .acceptedDateTime(getAcceptedDateTime())
                 .build();
@@ -68,8 +96,10 @@ public class Friends extends RequestAcceptTimeEntity {
                 .requesterIdx(requesterIdx.toFriendsResponse())
                 .accepterIdx(accepterIdx.toFriendsResponse())
                 .accepted(accepted)
-                .noticeCheckYn(noticeCheckYn)
-                .noticeDelYn(noticeDelYn)
+                .requesterNoticeCheckYn(requesterNoticeCheckYn)
+                .requesterNoticeDelYn(requesterNoticeDelYn)
+                .accepterNoticeCheckYn(accepterNoticeCheckYn)
+                .accepterNoticeDelYn(accepterNoticeDelYn)
                 .requestDateTime(getRequestDateTime())
                 .acceptedDateTime(getAcceptedDateTime())
                 .build();

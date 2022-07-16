@@ -117,6 +117,36 @@ public class FriendsController {
     }
 
     /**
+     * 알림 확인
+     */
+    @PutMapping("/friends/alarm") @ApiOperation(value = "알림 확인", notes = "사용자 토큰을 받아 알림 확인을 처리한다.")
+    public ResponseEntity<FriendsNoticeResponse> updateAlarm(Authentication authentication) {
+        Account account = (Account) authentication.getPrincipal();
+
+        List<FriendsNoticeResponse> friendsNoticeResponseList = friendService.checkNotice(account);
+
+        return new ResponseEntity(friendsNoticeResponseList, HttpStatus.OK);
+    }
+
+    /*
+     * 알림 삭제
+     */
+    @DeleteMapping("/friends/alarm/{requesterIdx}/{accepterIdx}") @ApiOperation(value = "알림 삭제", notes = "사용자 토큰을 받아 사용자를 확인한다. <br>requesterIdx 와 accepterIdx 를 받아 알림 요청을 식별한다. <br>사용자가 요청자일 경우 요청자의 알림만, 수락자일 경우 수락자의 알림만 삭제한다.")
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "requesterIdx", required = true, value = "예 : 8"),
+                    @ApiImplicitParam(name = "accepterIdx", required = true, value = "예 : 25")
+            }
+    )
+    public ResponseEntity deleteAlarm(Authentication authentication, @PathVariable Account requesterIdx, @PathVariable Account accepterIdx) {
+        Account account = (Account) authentication.getPrincipal();
+
+        friendService.deleteNotice(account, requesterIdx, accepterIdx);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    /**
      * 친구 삭제
      */
     @DeleteMapping("/friends/{requesterIdx}/{accepterIdx}") @ApiOperation(value = "친구 삭제", notes = "requesterIdx 와 accepterIdx 를 입력하여 친구를 삭제한다. (순서 상관 없음, 요청을 보내는 중일 때 1번 더 클릭시, 친구 상태에서 1번 더 클릭시 삭제)")

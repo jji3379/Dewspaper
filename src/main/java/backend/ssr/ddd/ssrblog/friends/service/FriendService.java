@@ -10,7 +10,6 @@ import backend.ssr.ddd.ssrblog.friends.domain.entity.QFriends;
 import backend.ssr.ddd.ssrblog.friends.domain.repository.FriendsRepository;
 import backend.ssr.ddd.ssrblog.friends.dto.FriendsNoticeResponse;
 import backend.ssr.ddd.ssrblog.friends.dto.FriendsRequest;
-import backend.ssr.ddd.ssrblog.friends.dto.FriendsResponse;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +40,7 @@ public class FriendService {
      * 친구 알림 목록
      */
     public Page<FriendsNoticeResponse> getNoticeList(Pageable pageable, Account accountIdx) {
-        Page<Friends> getNoticeList = friendsRepository.findByRequesterIdxOrAccepterIdxAndNoticeDelYnOrderByRequestDateTimeDesc(pageable, accountIdx, accountIdx, "N");
+        Page<Friends> getNoticeList = friendsRepository.findByRequesterIdxAndRequesterNoticeDelYnOrAccepterIdxAndAccepterNoticeDelYnOrderByRequestDateTimeDesc(pageable, accountIdx,"N", accountIdx, "N");
 
         List<FriendsNoticeResponse> friendsResponseList = new ArrayList<>();
         for (Friends friends : getNoticeList) {
@@ -122,22 +121,66 @@ public class FriendService {
         Friends getRequesterRequest = friendsRepository.findByRequesterIdxAndAccepterIdx(friendsRequest.getRequesterIdx(), friendsRequest.getAccepterIdx())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_FRIEND_REQUEST));
 
-        if (getRequesterRequest != null) {
-            // 양쪽 다 요청을 보냈을 경우 (없어도 이상한 경우가 아니기에 에러를 던지지 않음)
-            Optional<Friends> getAccepterRequest = friendsRepository.findByRequesterIdxAndAccepterIdx(friendsRequest.getAccepterIdx(), friendsRequest.getRequesterIdx());
-
-            // 반대쪽 요청도 수락
-            if (getAccepterRequest.isPresent()) {
-                Friends accepterRequest = getAccepterRequest.get();
-                accepterRequest.acceptFriend();
-
-                friendsRepository.save(accepterRequest);
-            }
-        }
-
         getRequesterRequest.acceptFriend();
 
         return friendsRepository.save(getRequesterRequest);
+    }
+
+    /**
+     * 알림 확인
+     * 그 사람의 accountIdx 를 받아서
+     * 그 사람이 requester 에 있는지
+     * accepter 에 있는지 확인하고
+     * 각각의 경우로 뽑아서 check 하기
+     */
+    @Transactional
+    public List<FriendsNoticeResponse> checkNotice(Account accountIdx) {
+        List<Friends> requesterNoticeCheckYn = friendsRepository.findByRequesterIdxAndRequesterNoticeCheckYn(accountIdx, "N");
+        List<Friends> accepterNoticeCheckYn = friendsRepository.findByAccepterIdxAndAccepterNoticeCheckYn(accountIdx, "N");
+
+        /**
+         * 추후 벌크 연산으로 수정
+         * https://dev-gorany.tistory.com/327
+         */
+
+        // requester 일 경우
+        for (Friends requester: requesterNoticeCheckYn) {
+            requester.checkRequesterNotice();
+            friendsRepository.save(requester);
+        }
+        // accepter 일 경우
+        for (Friends accepter: accepterNoticeCheckYn) {
+            accepter.checkAccepterNotice();
+            friendsRepository.save(accepter);
+        }
+
+        List<Friends> responseList = friendsRepository.findByRequesterIdxAndRequesterNoticeDelYnOrAccepterIdxAndAccepterNoticeDelYnOrderByRequestDateTimeDesc(accountIdx,"N", accountIdx, "N");
+        List<FriendsNoticeResponse> noticeResponseList = new ArrayList<>();
+        for (Friends friends : responseList) {
+            noticeResponseList.add(friends.toNoticeResponse());
+        }
+
+        return noticeResponseList;
+    }
+
+    /**
+     * 알림 삭제
+     */
+    @Transactional
+    public void deleteNotice(Account accountIdx, Account requesterIdx, Account accepterIdx) {
+
+        if (accountIdx.getAccountIdx().equals(requesterIdx.getAccountIdx())) { // 사용자가 요청자일 경우
+            Friends requester = friendsRepository.findByRequesterIdxAndAccepterIdxAndRequesterNoticeDelYn(requesterIdx, accepterIdx, "N")
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ALARM));
+            requester.deleteRequesterNotice();
+            friendsRepository.save(requester);
+
+        } else if (accountIdx.getAccountIdx().equals(accepterIdx.getAccountIdx())) { // 사용자가 수락자일 경우
+            Friends accepter = friendsRepository.findByRequesterIdxAndAccepterIdxAndAccepterNoticeDelYn(requesterIdx, accepterIdx, "N")
+                    .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ALARM));
+            accepter.deleteAccepterNotice();
+            friendsRepository.save(accepter);
+        }
     }
 
     /**

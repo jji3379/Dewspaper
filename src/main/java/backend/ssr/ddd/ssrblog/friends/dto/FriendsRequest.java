@@ -33,8 +33,10 @@ public class FriendsRequest {
                 .requesterIdx(Account.builder().accountIdx(requesterIdx).build())
                 .accepterIdx(Account.builder().accountIdx(accepterIdx).build())
                 .accepted("W")
-                .noticeCheckYn("N")
-                .noticeDelYn("N")
+                .requesterNoticeCheckYn("N")
+                .requesterNoticeDelYn("N")
+                .accepterNoticeCheckYn("N")
+                .accepterNoticeDelYn("N")
                 .build();
 
         return build;

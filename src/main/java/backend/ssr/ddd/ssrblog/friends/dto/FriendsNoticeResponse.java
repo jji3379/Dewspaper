@@ -22,26 +22,34 @@ public class FriendsNoticeResponse {
     @ApiModelProperty(value = "수락 여부", example = "W", position = 3)
     private String accepted;
 
-    @ApiModelProperty(value = "알림 확인 여부", example = "N", position = 4)
-    private String noticeCheckYn;
+    @ApiModelProperty(value = "요청자 알림 확인 여부", example = "N", position = 4)
+    private String requesterNoticeCheckYn = "N";
 
-    @ApiModelProperty(value = "알림 삭제 여부", example = "N", position = 5)
-    private String noticeDelYn;
+    @ApiModelProperty(value = "요청자 알림 삭제 여부", example = "N", position = 5)
+    private String requesterNoticeDelYn = "N";
+
+    @ApiModelProperty(value = "수락자 알림 확인 여부", example = "N", position = 6)
+    private String accepterNoticeCheckYn = "N";
+
+    @ApiModelProperty(value = "수락자 알림 삭제 여부", example = "N", position = 7)
+    private String accepterNoticeDelYn = "N";
     @CreatedDate
-    @ApiModelProperty(value = "요청 날짜", example = "2022-06-21 01:52:37", position = 6)
+    @ApiModelProperty(value = "요청 날짜", example = "2022-06-21 01:52:37", position = 8)
     private LocalDateTime requestDateTime;
 
     @LastModifiedDate
-    @ApiModelProperty(value = "수락 날짜", example = "2022-06-22 01:52:37", position = 7)
+    @ApiModelProperty(value = "수락 날짜", example = "2022-06-22 01:52:37", position = 9)
     private LocalDateTime acceptedDateTime;
 
     @Builder
-    public FriendsNoticeResponse(AccountFriendsResponse requesterIdx, AccountFriendsResponse accepterIdx, String accepted, String noticeCheckYn, String noticeDelYn, LocalDateTime requestDateTime, LocalDateTime acceptedDateTime) {
+    public FriendsNoticeResponse(AccountFriendsResponse requesterIdx, AccountFriendsResponse accepterIdx, String accepted, String requesterNoticeCheckYn, String requesterNoticeDelYn, String accepterNoticeCheckYn, String accepterNoticeDelYn, LocalDateTime requestDateTime, LocalDateTime acceptedDateTime) {
         this.requesterIdx = requesterIdx;
         this.accepterIdx = accepterIdx;
         this.accepted = accepted;
-        this.noticeCheckYn = noticeCheckYn;
-        this.noticeDelYn = noticeDelYn;
+        this.requesterNoticeCheckYn = requesterNoticeCheckYn;
+        this.requesterNoticeDelYn = requesterNoticeDelYn;
+        this.accepterNoticeCheckYn = accepterNoticeCheckYn;
+        this.accepterNoticeDelYn = accepterNoticeDelYn;
         this.requestDateTime = requestDateTime;
         this.acceptedDateTime = acceptedDateTime;
     }

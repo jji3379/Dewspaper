@@ -25,6 +25,7 @@ public enum ErrorCode {
     NOT_FOUND_ACCOUNT(NOT_FOUND, "요청하신 회원의 정보가 존재하지 않습니다"),
     NOT_FOUND_REQUESTER(NOT_FOUND, "친구 신청 회원의 정보가 존재하지 않습니다"),
     NOT_FOUND_ACCEPTER(NOT_FOUND, "친구 수락 회원의 정보가 존재하지 않습니다"),
+    NOT_FOUND_ALARM(NOT_FOUND, "삭제할 알람이 존재하지 않습니다"),
     NOT_FOUND_POST(NOT_FOUND, "요청하신 게시물이 존재하지 않습니다"),
     NOT_FOUND_COMMNET(NOT_FOUND, "요청하신 댓글이 존재하지 않습니다"),
     NOT_FOUND_FRIEND_REQUEST(NOT_FOUND, "요청하신 친구요청이 존재하지 않습니다"),
