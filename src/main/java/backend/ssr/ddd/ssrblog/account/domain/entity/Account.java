@@ -51,6 +51,7 @@ public class Account extends BaseTimeEntity implements UserDetails {
     public AccountResponse toResponse() {
         AccountResponse build = AccountResponse.builder()
                 .accountIdx(accountIdx)
+                .profileId(profileId)
                 .platform(platform)
                 .email(email)
                 .name(name)

@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 public class AccountResponse {
     private Long accountIdx;
+    private String profileId;
     private String email;
     private String platform;
     private String name;
@@ -25,8 +26,9 @@ public class AccountResponse {
     private LocalDateTime updateDate;
 
     @Builder
-    public AccountResponse(Long accountIdx, String email, String platform, String name, String blogName, String role, String profileImg, String withdrawal, String introduction, String emailAgree, String alarmAgree, LocalDateTime createDate, LocalDateTime updateDate) {
+    public AccountResponse(Long accountIdx, String profileId, String email, String platform, String name, String blogName, String role, String profileImg, String withdrawal, String introduction, String emailAgree, String alarmAgree, LocalDateTime createDate, LocalDateTime updateDate) {
         this.accountIdx = accountIdx;
+        this.profileId = profileId;
         this.email = email;
         this.platform = platform;
         this.name = name;
