@@ -54,16 +54,21 @@ public class SearchService {
         QueryResults<Post> posts = jpaQueryFactory.select(qPost)
                 .from(qPost)
                 .where(qPost.title.contains(search)
-                        .or(qPost.contents.contains(search)))
+                        .or(qPost.contents.contains(search))
+                        .and(qPost.delYn.eq("N")))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
 
         List<PostResponse> postResponseList = new ArrayList<>();
-        for (Post post : posts.getResults()) {
-            postResponseList.add(post.toResponse(postService.getCoWriterInfo(post)));
-        }
+        if (posts.getResults().isEmpty()) {
+            return new PageImpl<>(postResponseList, pageable, posts.getTotal());
+        } else {
+            for (Post post : posts.getResults()) {
+                postResponseList.add(post.toResponse(postService.getCoWriterInfo(post)));
+            }
 
-        return new PageImpl<>(postResponseList, pageable, posts.getTotal());
+            return new PageImpl<>(postResponseList, pageable, posts.getTotal());
+        }
     }
 }
