@@ -34,6 +34,9 @@ public class PostRequest {
     @ApiModelProperty(value = "함께한 동료", example = "[8, 11, 14]", position = 5)
     private WriterRequest coWriter;
 
+    @ApiModelProperty(value = "전체공개, 비공개 여부", example = "N", position = 6)
+    private String privated;
+
     public Post toEntity() {
         Post build = Post.builder()
                 .title(title)
@@ -41,7 +44,7 @@ public class PostRequest {
                 .thumbnailImg(thumbnailImg)
                 .thumbnailContents(thumbnailContents)
                 .boardCount(0)
-                .privated("N")
+                .privated(privated)
                 .delYn("N")
                 .build();
 
