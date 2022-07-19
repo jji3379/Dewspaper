@@ -44,6 +44,7 @@ public class Post extends BaseTimeEntity {
         this.thumbnailContents = postRequest.getThumbnailContents();
         this.title = postRequest.getTitle();
         this.contents = postRequest.getContents();
+        this.privated = postRequest.getPrivated();
     }
 
     public void updateBoardCount() {
