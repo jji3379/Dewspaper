@@ -26,6 +26,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,11 +84,11 @@ public class PostService {
      * - 조회시 조회수 증가
      */
     @Transactional
-    public PostResponse getPost(Long postIdx) {
+    public PostResponse getPost(Long postIdx, HttpServletRequest request, HttpServletResponse response) {
         Post getPost = postRepository.findPostByPostIdxAndDelYn(postIdx,"N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
 
-        getPost.updateBoardCount();
+        viewCountUp(postIdx, request, response);
         postRepository.save(getPost);
 
         return getPost.toResponse(getCoWriterInfo(getPost));
@@ -278,5 +281,35 @@ public class PostService {
         }
 
         return pagePostResponseList;
+    }
+
+    public void viewCountUp(Long postIdx, HttpServletRequest request, HttpServletResponse response) {
+        Cookie oldCookie = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("postView")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+
+        Post post = postRepository.findById(postIdx).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_POST));
+
+        if (oldCookie != null) {
+            if (!oldCookie.getValue().contains("[" + postIdx.toString() + "]")) {
+                post.updateBoardCount();
+                oldCookie.setValue(oldCookie.getValue() + "_[" + postIdx + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24);
+                response.addCookie(oldCookie);
+            }
+        } else {
+            post.updateBoardCount();
+            Cookie newCookie = new Cookie("postView","[" + postIdx + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24);
+            response.addCookie(newCookie);
+        }
     }
 }

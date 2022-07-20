@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -35,8 +37,8 @@ public class PostController {
 
     @GetMapping("/post/{postIdx}") @ApiOperation(value = "게시물 조회", notes = "게시물 번호가 postIdx 인 게시물의 정보를 조회한다.")
     @ApiImplicitParam(name = "postIdx", required = true, value = "예 : 1")
-    public ResponseEntity<PostResponse> getPost(@PathVariable Long postIdx) {
-        PostResponse post = postService.getPost(postIdx);
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long postIdx, HttpServletRequest request, HttpServletResponse response) {
+        PostResponse post = postService.getPost(postIdx, request, response);
 
         return new ResponseEntity(post, HttpStatus.OK);
     }
