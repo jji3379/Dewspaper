@@ -78,7 +78,7 @@ public class Account extends BaseTimeEntity implements UserDetails {
         return build;
     }
 
-    public AccountProfileResponse toProfileResponse(long postCount, long commentCount, long crewCount, boolean owner, boolean isCrew) {
+    public AccountProfileResponse toProfileResponse(long postCount, long commentCount, long crewCount, boolean owner, String isCrew) {
         AccountProfileResponse build = AccountProfileResponse.builder()
                 .accountIdx(accountIdx)
                 .profileId(profileId)

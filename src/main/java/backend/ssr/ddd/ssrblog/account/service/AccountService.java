@@ -43,7 +43,7 @@ public class AccountService {
     @Transactional(readOnly = true)
     public AccountProfileResponse getAccountProfile(Account accountIdx, Authentication authentication) {
         boolean owner = false; // 블로그의 주인을 확인
-        boolean isCrew = false; // 크루 여부
+        String isCrew = "N"; // 크루 여부
 
         Account accountProfile = accountRepository.findByAccountIdxAndWithdrawal(accountIdx.getAccountIdx(), "N")
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ACCOUNT));
@@ -53,10 +53,13 @@ public class AccountService {
             if (accountProfile.getEmail().equals(tokenValue.getEmail()) && accountProfile.getPlatform().equals(tokenValue.getPlatform())) { // 이메일과 플랫폼이 요청한 accountIdx 의 회원과 같을 경우
                 owner = true; // 주인임을 나타냄
             }
-            List<Account> friendsList = friendService.getFriendsList(tokenValue);
+            List<Account> accpetedFriendsList = friendService.getAcceptedFriendsList(tokenValue);
+            List<Account> waitingFriendsList = friendService.getWaitingFriendsList(tokenValue);
 
-            if (friendsList.contains(accountIdx)) {
-                isCrew = true;
+            if (accpetedFriendsList.contains(accountIdx)) {
+                isCrew = "Y";
+            } else if (waitingFriendsList.contains(accountIdx)) {
+                isCrew = "W";
             }
         }
 

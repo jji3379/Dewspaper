@@ -56,7 +56,7 @@ public class FriendsController {
     @GetMapping("/friends/{accountIdx}") @ApiOperation(value = "친구 목록 리스트", notes = "친구 목록 리스트 (요청 보내고 수락 받은 요청, 요청 받고 수락한 요청 다 포함)")
     @ApiImplicitParam(name = "accountIdx", required = true, value = "예 : 8")
     public ResponseEntity<List<AccountResponse>> getFriendsList(@PathVariable Account accountIdx) {
-        List<Account> getFriendsList = friendService.getFriendsList(accountIdx);
+        List<Account> getFriendsList = friendService.getAcceptedFriendsList(accountIdx);
 
         List<AccountResponse> responseList = new ArrayList<>();
 

@@ -54,7 +54,7 @@ public class FriendService {
      * 친구 목록 리스트
      */
     @Transactional(readOnly = true)
-    public List<Account> getFriendsList(Account accountIdx) {
+    public List<Account> getAcceptedFriendsList(Account accountIdx) {
         QFriends qFriends = QFriends.friends;
         QAccount qAccount = QAccount.account;
 
@@ -72,6 +72,34 @@ public class FriendService {
                                         .where(qFriends.accepterIdx.eq(accountIdx)
                                                         .and(qFriends.accepted.eq("Y"))
                                         ))
+                ))
+                .fetch();
+
+        return requesterFriendsList;
+    }
+
+    /**
+     * 친구 수락 대기중
+     */
+    @Transactional(readOnly = true)
+    public List<Account> getWaitingFriendsList(Account accountIdx) {
+        QFriends qFriends = QFriends.friends;
+        QAccount qAccount = QAccount.account;
+
+        List<Account> requesterFriendsList = jpaQueryFactory.select(qAccount).distinct()
+                .from(qAccount)
+                .where(qAccount.accountIdx.in(
+                        JPAExpressions.select(qFriends.accepterIdx.accountIdx.as("accountIdx")) // 내가 요청을 보내서 친구가 된 경우
+                                .from(qFriends)
+                                .where(qFriends.requesterIdx.eq(accountIdx)
+                                        .and(qFriends.accepted.eq("W"))
+                                )
+                ).or(qAccount.accountIdx.in(
+                        JPAExpressions.select(qFriends.requesterIdx.accountIdx.as("accountIdx"))
+                                .from(qFriends)
+                                .where(qFriends.accepterIdx.eq(accountIdx)
+                                        .and(qFriends.accepted.eq("W"))
+                                ))
                 ))
                 .fetch();
 

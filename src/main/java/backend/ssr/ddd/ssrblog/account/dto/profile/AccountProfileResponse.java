@@ -22,11 +22,10 @@ public class AccountProfileResponse {
     private long postCount;
     private long commentCount;
     private long crewCount;
-
-    private boolean isCrew;
+    private String isCrew;
 
     @Builder
-    public AccountProfileResponse(Long accountIdx, String profileId, String email, String platform, String name, String blogName, String role, String profileImg, String introduction, String emailAgree, String alarmAgree, boolean owner, long postCount, long commentCount, long crewCount, boolean isCrew) {
+    public AccountProfileResponse(Long accountIdx, String profileId, String email, String platform, String name, String blogName, String role, String profileImg, String introduction, String emailAgree, String alarmAgree, boolean owner, long postCount, long commentCount, long crewCount, String isCrew) {
         this.accountIdx = accountIdx;
         this.profileId = profileId;
         this.email = email;
