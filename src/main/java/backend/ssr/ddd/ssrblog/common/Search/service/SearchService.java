@@ -37,6 +37,7 @@ public class SearchService {
                         .or(qAccount.name.contains(search)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(qAccount.createDate.desc())
                 .fetchResults();
 
         List<AccountResponse> accountResponseList = new ArrayList<>();
@@ -58,6 +59,7 @@ public class SearchService {
                         .and(qPost.delYn.eq("N")))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(qPost.createDate.desc())
                 .fetchResults();
 
         List<PostResponse> postResponseList = new ArrayList<>();
