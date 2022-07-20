@@ -38,6 +38,9 @@ public class PostRequest {
     private String privated;
 
     public Post toEntity() {
+        if (privated == null) {
+            privated = "N";
+        }
         Post build = Post.builder()
                 .title(title)
                 .contents(contents)
