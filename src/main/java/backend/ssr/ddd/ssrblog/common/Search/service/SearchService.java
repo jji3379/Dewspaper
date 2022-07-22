@@ -33,9 +33,10 @@ public class SearchService {
 
         QueryResults<Account> accounts = jpaQueryFactory.select(qAccount)
                 .from(qAccount)
-                .where(qAccount.email.contains(search)
+                .where(qAccount.profileId.contains(search)
+                        .or(qAccount.email.contains(search))
                         .or(qAccount.name.contains(search))
-                        .or(qAccount.profileId.contains(search)))
+                        .and(qAccount.withdrawal.eq("N")))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(qAccount.createDate.desc())
