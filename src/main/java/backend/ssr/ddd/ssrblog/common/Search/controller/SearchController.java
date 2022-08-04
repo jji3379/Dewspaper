@@ -45,4 +45,9 @@ public class SearchController {
 
         return new ResponseEntity<>(postResponses, HttpStatus.OK);
     }
+
+    @GetMapping("/ssl-feign-test")
+    public String feignTest() {
+        return "SSL Feign Test";
+    }
 }
