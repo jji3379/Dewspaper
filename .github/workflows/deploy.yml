@@ -1,9 +1,9 @@
 name: ssr-blog
 
 on:
-  push:
-    branches:
-      [ master, dev ]
+#  push:
+#    branches:
+#      [ master, dev ]
   workflow_dispatch:
 
 jobs:
