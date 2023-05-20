@@ -6,6 +6,9 @@
 * 프론트엔드 2명
 * 백엔드 2명
 
+### 작업 기간
+2022.04.16 ~ 2022.07.23
+
 ### 협업 툴
 <img src="https://github.com/jji3379/Dewspaper/assets/60234579/ce013321-d16e-4f28-88de-832635a06d84" height="50px">
 <img src="https://github.com/jji3379/Dewspaper/assets/60234579/3ca66a8a-f493-4cf6-a7b4-1861b40ac7c3" height="50px">
