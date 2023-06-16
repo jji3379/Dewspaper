@@ -1,4 +1,5 @@
-# Dewspaper 
+<h1><img style="margin-bottom:-10px" src="https://github.com/jji3379/Dewspaper/assets/60234579/99012d63-bdb8-4edc-af30-7d2a3387e684" height="40px">Dewspaper</h1>
+
 > 디자이너와 개발자가 함께 작성하기 편한 팀 단위 블로그
 
 ### 참여 인원
